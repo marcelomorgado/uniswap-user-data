@@ -1,8 +1,18 @@
 import React from "react";
-import ReactVirtualizedTable from "./components/presentational/ReactVirtualizedTable";
+import UsersScreen from "./components/container/UsersScreen";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
+
+const client = new ApolloClient({
+  uri: "https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap",
+});
 
 function App() {
-  return <ReactVirtualizedTable />;
+  return (
+    <ApolloProvider client={client}>
+      <UsersScreen />
+    </ApolloProvider>
+  );
 }
 
 export default App;
