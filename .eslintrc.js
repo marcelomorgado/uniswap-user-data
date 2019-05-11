@@ -13,12 +13,6 @@ module.exports = {
     "prettier/react",
     "plugin:jest/recommended",
   ],
-  // globals: {
-  //   Atomics: "readonly",
-  //   SharedArrayBuffer: "readonly",
-  //   expect: true,
-  //   sinon: true,
-  // },
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: "module",

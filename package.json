@@ -12,9 +12,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx prettier --write './src/{*.js,**/*.js}' && npx eslint './src/{*.js,**/*.js,**/*.snap}'"
+    "lint": "npx prettier --write './src/{*.js,**/*.js}' && npx eslint './src/{*.js,**/*.js,**/*.snap}'",
+    "test": "npx jest && npm run lint"
   },
   "eslintConfig": {
     "extends": "react-app"
