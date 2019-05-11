@@ -6,31 +6,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { AutoSizer, Column, SortDirection, Table } from "react-virtualized";
 
-const styles = theme => ({
-  table: {
-    fontFamily: theme.typography.fontFamily,
-  },
-  flexContainer: {
-    display: "flex",
-    alignItems: "center",
-    boxSizing: "border-box",
-  },
-  tableRow: {
-    cursor: "pointer",
-  },
-  tableRowHover: {
-    "&:hover": {
-      backgroundColor: theme.palette.grey[200],
-    },
-  },
-  tableCell: {
-    flex: 1,
-  },
-  noClick: {
-    cursor: "initial",
-  },
-});
-
+// Note component extracted from Material UI documentation
+// Refs: https://material-ui.com/demos/tables/#virtualized-table
 class MuiVirtualizedTable extends React.PureComponent {
   getRowClassName = ({ index }) => {
     const { classes, rowClassName, onRowClick } = this.props;
@@ -169,6 +146,31 @@ MuiVirtualizedTable.defaultProps = {
   headerHeight: 56,
   rowHeight: 56,
 };
+
+const styles = theme => ({
+  table: {
+    fontFamily: theme.typography.fontFamily,
+  },
+  flexContainer: {
+    display: "flex",
+    alignItems: "center",
+    boxSizing: "border-box",
+  },
+  tableRow: {
+    cursor: "pointer",
+  },
+  tableRowHover: {
+    "&:hover": {
+      backgroundColor: theme.palette.grey[200],
+    },
+  },
+  tableCell: {
+    flex: 1,
+  },
+  noClick: {
+    cursor: "initial",
+  },
+});
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 

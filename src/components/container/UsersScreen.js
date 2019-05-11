@@ -1,6 +1,5 @@
 import React from "react";
 import UsersTable from "../presentational/UsersTable";
-import Paper from "@material-ui/core/Paper";
 
 const data = [
   ["0x123", 159],
@@ -24,11 +23,7 @@ for (let i = 0; i < 200; i += 1) {
 }
 
 function UsersScreen() {
-  return (
-    <Paper style={{ height: 400, width: "100%" }}>
-      <UsersTable rows={rows} />
-    </Paper>
-  );
+  return <UsersTable rows={rows} />;
 }
 
 export default UsersScreen;

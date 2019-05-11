@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import VirtualizedTable from "./VirtualizedTable";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
 
-function UsersTable({ rows }) {
+function UsersTable({ rows, classes }) {
   const onClick = e => {
     console.log(e);
   };
@@ -23,16 +25,19 @@ function UsersTable({ rows }) {
   ];
 
   return (
-    <VirtualizedTable
-      rowCount={rows.length}
-      rowGetter={({ index }) => rows[index]}
-      onRowClick={onClick}
-      columns={columns}
-    />
+    <Paper className={classes.paper}>
+      <VirtualizedTable
+        rowCount={rows.length}
+        rowGetter={({ index }) => rows[index]}
+        onRowClick={onClick}
+        columns={columns}
+      />
+    </Paper>
   );
 }
 
 UsersTable.propTypes = {
+  classes: PropTypes.object.isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -42,4 +47,8 @@ UsersTable.propTypes = {
   ).isRequired,
 };
 
-export default UsersTable;
+const styles = () => ({
+  paper: { height: 400, width: "100%" },
+});
+
+export default withStyles(styles)(UsersTable);
