@@ -31,7 +31,7 @@ const styles = theme => ({
   },
 });
 
-class SimpleModal extends React.Component {
+class TransactionsModal extends React.Component {
   render() {
     const { classes, handleOpen, handleClose, open, userId } = this.props;
 
@@ -58,7 +58,7 @@ class SimpleModal extends React.Component {
   }
 }
 
-SimpleModal.propTypes = {
+TransactionsModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleOpen: PropTypes.func.isRequired,
@@ -66,7 +66,4 @@ SimpleModal.propTypes = {
   userId: PropTypes.string,
 };
 
-// We need an intermediary variable for handling the recursive nesting.
-const SimpleModalWrapped = withStyles(styles)(SimpleModal);
-
-export default SimpleModalWrapped;
+export default withStyles(styles)(TransactionsModal);

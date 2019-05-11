@@ -1,6 +1,6 @@
 import React from "react";
 import UsersTable from "../presentational/UsersTable";
-import SimpleModalWrapped from "../presentational/TransactionsModal";
+import TransactionsModal from "../presentational/TransactionsModal";
 
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
@@ -55,7 +55,7 @@ class UsersScreen extends React.Component {
 
           return (
             <>
-              <SimpleModalWrapped
+              <TransactionsModal
                 open={this.state.modalOpen}
                 handleOpen={this.handleOpen}
                 handleClose={this.handleClose}
