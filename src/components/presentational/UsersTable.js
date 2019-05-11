@@ -15,7 +15,7 @@ function UsersTable({ rows, classes }) {
       width: 200,
       flexGrow: 1.0,
       label: "User ID",
-      dataKey: "userId",
+      dataKey: "id",
     },
     {
       width: 120,
@@ -41,8 +41,7 @@ UsersTable.propTypes = {
   classes: PropTypes.object.isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      userId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       etherBalance: PropTypes.string.isRequired,
     })
   ).isRequired,

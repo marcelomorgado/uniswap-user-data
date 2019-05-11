@@ -11,13 +11,11 @@ exports[`renders without crashing 1`] = `
     Array [
       Object {
         "etherBalance": "1.234567890",
-        "id": 0,
-        "userId": "0x0000000000c90bc353314b6911180ed7e06019a9",
+        "id": "0x0000000000c90bc353314b6911180ed7e06019a9",
       },
       Object {
         "etherBalance": "1000.98787878787",
-        "id": 1,
-        "userId": "0x000000000a3c7c86345a35a0e97a4bb4370a8dd9",
+        "id": "0x000000000a3c7c86345a35a0e97a4bb4370a8dd9",
       },
     ]
   }

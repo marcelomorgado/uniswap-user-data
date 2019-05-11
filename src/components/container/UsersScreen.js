@@ -4,11 +4,8 @@ import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
 const usersToRows = users => {
-  let id = 0;
-  const rows = users.map(u => {
-    const { id: userId } = u;
-    ++id;
-    return { id, userId, etherBalance: 123 };
+  const rows = users.map(user => {
+    return { ...user, etherBalance: "-" };
   });
 
   return rows;
