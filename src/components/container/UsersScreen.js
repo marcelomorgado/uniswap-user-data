@@ -3,6 +3,17 @@ import UsersTable from "../presentational/UsersTable";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
+const usersToRows = users => {
+  let id = 0;
+  const rows = users.map(u => {
+    const { id: userId } = u;
+    ++id;
+    return { id, userId, etherBalance: 123 };
+  });
+
+  return rows;
+};
+
 const UsersScreen = () => (
   <Query
     query={gql`
@@ -17,13 +28,7 @@ const UsersScreen = () => (
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;
       const { users } = data;
-
-      let id = 0;
-      const rows = users.map(u => {
-        const { id: userId } = u;
-        ++id;
-        return { id, userId, etherBalance: 123 };
-      });
+      const rows = usersToRows(users);
 
       return <UsersTable rows={rows} />;
     }}
