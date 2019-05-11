@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 function UsersTable({ rows, classes }) {
   const onClick = e => {
+    /* eslint-disable no-console */
     console.log(e);
   };
 

@@ -30,14 +30,14 @@ it("renders without crashing", () => {
 
 // const getUsers = async () => {
 //   const result = await client.query({
-//     query: gql`
-//       {
-//         users {
-//           id
-//         }
+//   query: gql`
+//     {
+//       users {
+//         id
 //       }
-//     `,
-//   });
+//     }
+//   `,
+// });
 //
 //   const { data } = result;
 //   const { users } = data;

@@ -1,29 +1,33 @@
 import React from "react";
 import UsersTable from "../presentational/UsersTable";
+import { Query } from "react-apollo";
+import { gql } from "apollo-boost";
 
-const data = [
-  ["0x123", 159],
-  ["0x456", 237],
-  ["0x789", 262],
-  ["0x987", 305],
-  ["0x654", 356],
-];
+const UsersScreen = () => (
+  <Query
+    query={gql`
+      {
+        users {
+          id
+        }
+      }
+    `}
+  >
+    {({ loading, error, data }) => {
+      if (loading) return <p>Loading...</p>;
+      if (error) return <p>Error :(</p>;
+      const { users } = data;
 
-let id = 0;
-function createData(userId, etherBalance) {
-  id += 1;
-  return { id, userId, etherBalance };
-}
+      let id = 0;
+      const rows = users.map(u => {
+        const { id: userId } = u;
+        ++id;
+        return { id, userId, etherBalance: 123 };
+      });
 
-const rows = [];
-
-for (let i = 0; i < 200; i += 1) {
-  const randomSelection = data[Math.floor(Math.random() * data.length)];
-  rows.push(createData(...randomSelection));
-}
-
-function UsersScreen() {
-  return <UsersTable rows={rows} />;
-}
+      return <UsersTable rows={rows} />;
+    }}
+  </Query>
+);
 
 export default UsersScreen;
