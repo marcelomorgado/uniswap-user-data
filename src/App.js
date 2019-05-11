@@ -1,8 +1,8 @@
 import React from "react";
-import ReactVirtualizedTable from "./components/presentational/ReactVirtualizedTable";
+import UsersScreen from "./components/container/UsersScreen";
 
 function App() {
-  return <ReactVirtualizedTable />;
+  return <UsersScreen />;
 }
 
 export default App;
