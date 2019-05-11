@@ -23,7 +23,7 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "no-console": ["error", { allow: ["warn", "error", "info"] }],
-    "jest/no-large-snapshots": ["error", { maxSize: 50 }],
+    "jest/no-large-snapshots": ["error", { maxSize: 60 }],
   },
   settings: {
     react: {

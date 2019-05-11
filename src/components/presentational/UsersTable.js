@@ -21,7 +21,7 @@ function UsersTable({ rows, classes }) {
       width: 120,
       label: "ETH Balance",
       dataKey: "etherBalance",
-      numeric: true,
+      numeric: false,
     },
   ];
 
@@ -43,7 +43,7 @@ UsersTable.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       userId: PropTypes.string.isRequired,
-      etherBalance: PropTypes.number.isRequired,
+      etherBalance: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
