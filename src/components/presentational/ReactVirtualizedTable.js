@@ -11,27 +11,27 @@ import { AutoSizer, Column, SortDirection, Table } from "react-virtualized";
 
 const styles = theme => ({
   table: {
-    fontFamily: theme.typography.fontFamily
+    fontFamily: theme.typography.fontFamily,
   },
   flexContainer: {
     display: "flex",
     alignItems: "center",
-    boxSizing: "border-box"
+    boxSizing: "border-box",
   },
   tableRow: {
-    cursor: "pointer"
+    cursor: "pointer",
   },
   tableRowHover: {
     "&:hover": {
-      backgroundColor: theme.palette.grey[200]
-    }
+      backgroundColor: theme.palette.grey[200],
+    },
   },
   tableCell: {
-    flex: 1
+    flex: 1,
   },
   noClick: {
-    cursor: "initial"
-  }
+    cursor: "initial",
+  },
 });
 
 class MuiVirtualizedTable extends React.PureComponent {
@@ -39,7 +39,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     const { classes, rowClassName, onRowClick } = this.props;
 
     return classNames(classes.tableRow, classes.flexContainer, rowClassName, {
-      [classes.tableRowHover]: index !== -1 && onRowClick != null
+      [classes.tableRowHover]: index !== -1 && onRowClick != null,
     });
   };
 
@@ -49,7 +49,7 @@ class MuiVirtualizedTable extends React.PureComponent {
       <TableCell
         component="div"
         className={classNames(classes.tableCell, classes.flexContainer, {
-          [classes.noClick]: onRowClick == null
+          [classes.noClick]: onRowClick == null,
         })}
         variant="body"
         style={{ height: rowHeight }}
@@ -68,7 +68,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     const { headerHeight, columns, classes, sort } = this.props;
     const direction = {
       [SortDirection.ASC]: "asc",
-      [SortDirection.DESC]: "desc"
+      [SortDirection.DESC]: "desc",
     };
 
     const inner =
@@ -122,7 +122,7 @@ class MuiVirtualizedTable extends React.PureComponent {
                   renderer = cellRendererProps =>
                     this.cellRenderer({
                       cellData: cellContentRenderer(cellRendererProps),
-                      columnIndex: index
+                      columnIndex: index,
                     });
                 } else {
                   renderer = this.cellRenderer;
@@ -134,7 +134,7 @@ class MuiVirtualizedTable extends React.PureComponent {
                     headerRenderer={headerProps =>
                       this.headerRenderer({
                         ...headerProps,
-                        columnIndex: index
+                        columnIndex: index,
                       })
                     }
                     className={classNames(classes.flexContainer, className)}
@@ -158,19 +158,19 @@ MuiVirtualizedTable.propTypes = {
     PropTypes.shape({
       cellContentRenderer: PropTypes.func,
       dataKey: PropTypes.string.isRequired,
-      width: PropTypes.number.isRequired
+      width: PropTypes.number.isRequired,
     })
   ).isRequired,
   headerHeight: PropTypes.number,
   onRowClick: PropTypes.func,
   rowClassName: PropTypes.string,
   rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
-  sort: PropTypes.func
+  sort: PropTypes.func,
 };
 
 MuiVirtualizedTable.defaultProps = {
   headerHeight: 56,
-  rowHeight: 56
+  rowHeight: 56,
 };
 
 const WrappedVirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
@@ -180,7 +180,7 @@ const data = [
   ["Ice cream sandwich", 237, 9.0, 37, 4.3],
   ["Eclair", 262, 16.0, 24, 6.0],
   ["Cupcake", 305, 3.7, 67, 4.3],
-  ["Gingerbread", 356, 16.0, 49, 3.9]
+  ["Gingerbread", 356, 16.0, 49, 3.9],
 ];
 
 let id = 0;
@@ -208,32 +208,32 @@ function ReactVirtualizedTable() {
             width: 200,
             flexGrow: 1.0,
             label: "Dessert",
-            dataKey: "dessert"
+            dataKey: "dessert",
           },
           {
             width: 120,
             label: "Calories (g)",
             dataKey: "calories",
-            numeric: true
+            numeric: true,
           },
           {
             width: 120,
             label: "Fat (g)",
             dataKey: "fat",
-            numeric: true
+            numeric: true,
           },
           {
             width: 120,
             label: "Carbs (g)",
             dataKey: "carbs",
-            numeric: true
+            numeric: true,
           },
           {
             width: 120,
             label: "Protein (g)",
             dataKey: "protein",
-            numeric: true
-          }
+            numeric: true,
+          },
         ]}
       />
     </Paper>
