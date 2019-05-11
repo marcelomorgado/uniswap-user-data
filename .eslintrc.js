@@ -4,10 +4,15 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    mocha: true,
   },
-  plugins: ["react", "prettier"],
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  plugins: ["react", "prettier", "jest"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react",
+    "plugin:jest/recommended",
+  ],
   // globals: {
   //   Atomics: "readonly",
   //   SharedArrayBuffer: "readonly",
@@ -24,6 +29,7 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "no-console": ["error", { allow: ["warn", "error", "info"] }],
+    "jest/no-large-snapshots": ["error", { maxSize: 50 }],
   },
   settings: {
     react: {
