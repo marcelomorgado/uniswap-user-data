@@ -6,8 +6,8 @@ import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
 const GET_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!) {
-    transactions(where: { user: $userId }) {
+  query Transaction($userId: String!, $cursor: String) {
+    transactions(first: 15, where: { user: $userId }, after: $cursor) {
       id
       tx
       event
@@ -27,7 +27,7 @@ const GET_USER_TRANSACTIONS = gql`
 const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
   return (
     <Query query={GET_USER_TRANSACTIONS} variables={{ userId }}>
-      {({ loading, error, data }) => {
+      {({ loading, error, data, fetchMore }) => {
         if (loading) return <p>Loading...</p>;
         if (error) return <p>Error :(</p>;
         const { transactions } = data;
@@ -39,6 +39,26 @@ const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
             handleClose={handleClose}
             userId={userId}
             transactions={transactions}
+            onLoadMore={() => {
+              const lastTransaction = transactions[transactions.length - 1];
+              const { id: cursor } = lastTransaction;
+
+              return fetchMore({
+                variables: {
+                  cursor,
+                },
+                updateQuery: (prevResult, { fetchMoreResult: newData }) => {
+                  const { transactions: prevTransactions } = prevResult;
+                  const { transactions: newTransactions } = newData;
+
+                  return newTransactions.length
+                    ? {
+                        transactions: [...prevTransactions, ...newTransactions],
+                      }
+                    : prevResult;
+                },
+              });
+            }}
           />
         );
       }}

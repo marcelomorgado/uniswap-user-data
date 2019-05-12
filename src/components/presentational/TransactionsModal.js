@@ -5,13 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50;
+  const left = 50;
 
   return {
     top: `${top}%`,
@@ -23,7 +19,8 @@ function getModalStyle() {
 const styles = theme => ({
   paper: {
     position: "absolute",
-    width: theme.spacing.unit * 50,
+    //width: theme.spacing.unit * 100,
+    width: "80%",
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
@@ -36,6 +33,7 @@ class TransactionsModal extends React.Component {
     const {
       classes,
       handleOpen,
+      onLoadMore,
       handleClose,
       open,
       userId,
@@ -45,7 +43,6 @@ class TransactionsModal extends React.Component {
 
     return (
       <div>
-        <Button onClick={handleOpen}>Open Modal</Button>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -53,6 +50,7 @@ class TransactionsModal extends React.Component {
           onClose={handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
+            <Button onClick={onLoadMore}>LoadMore</Button>
             <Typography variant="h6" id="modal-title">
               {`User ID = ${userId} with ${txAmount} txs`}
             </Typography>
@@ -71,6 +69,7 @@ TransactionsModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleOpen: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
   userId: PropTypes.string,
   transactions: PropTypes.array,
 };
