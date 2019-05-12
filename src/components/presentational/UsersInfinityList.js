@@ -1,13 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Transaction from "./Transaction";
 import InfinityList from "./InfinityList";
+import User from "./User";
 
-export default function TransactionsInfiniteList({
+function UsersInfiniteList({
   hasNextPage,
   isNextPageLoading,
   items,
   loadNextPage,
+  onTransactionsClick,
 }) {
   return (
     <InfinityList
@@ -16,16 +17,25 @@ export default function TransactionsInfiniteList({
       hasNextPage={hasNextPage}
       isNextPageLoading={isNextPageLoading}
       rowRender={({ item, style }) => {
-        return <Transaction transaction={item} style={style} />;
+        return (
+          <User
+            style={style}
+            user={item}
+            handleTransactions={onTransactionsClick}
+          />
+        );
       }}
-      rowHeight={30}
+      rowHeight={200}
     />
   );
 }
 
-TransactionsInfiniteList.propTypes = {
+UsersInfiniteList.propTypes = {
   hasNextPage: PropTypes.bool.isRequired,
   isNextPageLoading: PropTypes.bool.isRequired,
   loadNextPage: PropTypes.func.isRequired,
+  onTransactionsClick: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
 };
+
+export default UsersInfiniteList;

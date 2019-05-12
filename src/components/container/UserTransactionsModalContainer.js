@@ -67,6 +67,10 @@ class UserTransactionsModalContainer extends React.PureComponent {
           if (error) return <p>Error :(</p>;
           const { transactions } = data;
 
+          if (!transactions.length) {
+            this.setState({ hasNextPage: false });
+          }
+
           const onLoadMore = () => {
             const lastTransaction = transactions[transactions.length - 1];
             const { id: cursor } = lastTransaction;

@@ -16,11 +16,9 @@ class UsersScreen extends React.Component {
     this.setState({ txModalOpen: false });
   };
 
-  onRowClick = e => {
-    const { rowData: user } = e;
-    const { id: userId } = user;
+  onRowClick = userId => {
     this.setState({ userId });
-    console.log(user);
+    console.log(userId);
     this.openTxModal();
   };
 
