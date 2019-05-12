@@ -51,11 +51,15 @@ const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
                   const { transactions: prevTransactions } = prevResult;
                   const { transactions: newTransactions } = newData;
 
-                  return newTransactions.length
-                    ? {
-                        transactions: [...prevTransactions, ...newTransactions],
-                      }
-                    : prevResult;
+                  if (!newData || !newTransactions.length) return prevResult;
+
+                  const transactions = [
+                    ...prevTransactions,
+                    ...newTransactions,
+                  ];
+
+                  const data = { transactions };
+                  return data;
                 },
               });
             }}
