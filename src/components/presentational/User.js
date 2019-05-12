@@ -71,5 +71,4 @@ User.propTypes = {
   handleTransactions: PropTypes.func.isRequired,
 };
 
-//export default User;
 export default withStyles(styles)(User);

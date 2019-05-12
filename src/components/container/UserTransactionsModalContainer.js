@@ -67,6 +67,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
+
           const { transactions } = data;
 
           if (!transactions.length) {

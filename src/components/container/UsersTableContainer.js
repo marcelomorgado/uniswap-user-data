@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const GET_USERS = gql`
   query User($itemsPerPage: Int) {

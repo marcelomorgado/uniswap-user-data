@@ -21,7 +21,6 @@ function InfiniteList({
 
   const isItemLoaded = index => !hasNextPage || index < items.length;
 
-  // Render an item or a loading indicator.
   // eslint-disable-next-line react/prop-types
   const Item = ({ index, style }) => {
     if (!isItemLoaded(index)) {
