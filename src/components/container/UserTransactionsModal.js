@@ -32,6 +32,28 @@ const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
         if (error) return <p>Error :(</p>;
         const { transactions } = data;
 
+        const onLoadMore = () => {
+          const lastTransaction = transactions[transactions.length - 1];
+          const { id: cursor } = lastTransaction;
+
+          return fetchMore({
+            variables: {
+              cursor,
+            },
+            updateQuery: (prevResult, { fetchMoreResult: newData }) => {
+              const { transactions: prevTransactions } = prevResult;
+              const { transactions: newTransactions } = newData;
+
+              if (!newData || !newTransactions.length) return prevResult;
+
+              const transactions = [...prevTransactions, ...newTransactions];
+
+              const data = { transactions };
+              return data;
+            },
+          });
+        };
+
         return (
           <TransactionsModal
             open={open}
@@ -39,30 +61,7 @@ const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
             handleClose={handleClose}
             userId={userId}
             transactions={transactions}
-            onLoadMore={() => {
-              const lastTransaction = transactions[transactions.length - 1];
-              const { id: cursor } = lastTransaction;
-
-              return fetchMore({
-                variables: {
-                  cursor,
-                },
-                updateQuery: (prevResult, { fetchMoreResult: newData }) => {
-                  const { transactions: prevTransactions } = prevResult;
-                  const { transactions: newTransactions } = newData;
-
-                  if (!newData || !newTransactions.length) return prevResult;
-
-                  const transactions = [
-                    ...prevTransactions,
-                    ...newTransactions,
-                  ];
-
-                  const data = { transactions };
-                  return data;
-                },
-              });
-            }}
+            onLoadMore={onLoadMore}
           />
         );
       }}
