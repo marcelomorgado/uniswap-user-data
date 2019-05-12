@@ -15,8 +15,12 @@ class TransferEtherButtonContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
+  handleTransfer = (from, to) => {
+    console.log(`${from} -> ${to}`);
+  };
+
   render() {
-    const { state, openModal, closeModal } = this;
+    const { state, openModal, closeModal, handleTransfer } = this;
     const { modalOpen } = state;
     const onClick = () => {
       this.openModal();
@@ -29,6 +33,7 @@ class TransferEtherButtonContainer extends React.Component {
           open={modalOpen}
           handleOpen={openModal}
           handleClose={closeModal}
+          handleTransfer={handleTransfer}
         />
       </Fragment>
     );

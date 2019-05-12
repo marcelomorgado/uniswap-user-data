@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-
 import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   button: {
@@ -18,7 +17,7 @@ function TransferEtherButton({ onClick, classes }) {
       className={classes.button}
       onClick={onClick}
     >
-      Transfer ETH
+      Transfer 1 ETH
     </Button>
   );
 }
