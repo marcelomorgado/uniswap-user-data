@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import TransactionsInfiniteList from "./TransactionsInfiniteList";
+import { toTokenTransactions, toEtherTransactions } from "../../helpers";
 
 function getModalStyle() {
   const top = 50;
@@ -38,6 +39,8 @@ class UserTransactionsModal extends React.Component {
       isNextPageLoading,
     } = this.props;
 
+    const etherTransactions = toEtherTransactions(transactions);
+
     return (
       <div>
         <Modal
@@ -48,7 +51,7 @@ class UserTransactionsModal extends React.Component {
         >
           <div style={getModalStyle()} className={classes.paper}>
             <TransactionsInfiniteList
-              items={transactions}
+              items={etherTransactions}
               loadNextPage={onLoadMore}
               hasNextPage={hasNextPage}
               isNextPageLoading={isNextPageLoading}
