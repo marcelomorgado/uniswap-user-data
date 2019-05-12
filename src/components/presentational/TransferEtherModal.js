@@ -71,7 +71,9 @@ class TransferEtherModal extends React.Component {
 
     const onTransfer = () => {
       handleTransfer(from, to);
+      handleClose();
     };
+
     return (
       <div>
         <Modal
