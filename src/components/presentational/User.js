@@ -62,13 +62,6 @@ function User({ user, style, classes, handleTransactions }) {
       </CardActions>
     </Card>
   );
-  // return (
-  //   <div style={style}>
-  //     <div>
-  //       {id} - {etherBalance}
-  //     </div>
-  //   </div>
-  // );
 }
 
 User.propTypes = {

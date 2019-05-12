@@ -23,14 +23,6 @@ const GET_MORE_USERS = gql`
   }
 `;
 
-// const usersToRows = users => {
-//   const rows = users.map(user => {
-//     return { ...user, etherBalance: "-" };
-//   });
-//
-//   return rows;
-// };
-
 class UsersTableContainer extends React.Component {
   state = {
     hasNextPage: true,
@@ -93,7 +85,6 @@ class UsersTableContainer extends React.Component {
               onTransactionsClick={onRowClick}
             />
           );
-          //  return <UsersTable rows={users} onRowClick={this.props.onRowClick} />;
         }}
       </Query>
     );
