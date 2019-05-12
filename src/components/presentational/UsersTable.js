@@ -4,18 +4,13 @@ import VirtualizedTable from "./VirtualizedTable";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 
-function UsersTable({ rows, classes }) {
-  const onClick = e => {
-    /* eslint-disable no-console */
-    console.log(e);
-  };
-
+function UsersTable({ rows, onRowClick, classes }) {
   const columns = [
     {
       width: 200,
       flexGrow: 1.0,
       label: "User ID",
-      dataKey: "userId",
+      dataKey: "id",
     },
     {
       width: 120,
@@ -30,7 +25,9 @@ function UsersTable({ rows, classes }) {
       <VirtualizedTable
         rowCount={rows.length}
         rowGetter={({ index }) => rows[index]}
-        onRowClick={onClick}
+        onRowClick={e => {
+          onRowClick(e);
+        }}
         columns={columns}
       />
     </Paper>
@@ -38,14 +35,14 @@ function UsersTable({ rows, classes }) {
 }
 
 UsersTable.propTypes = {
-  classes: PropTypes.object.isRequired,
+  onRowClick: PropTypes.func.isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      userId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       etherBalance: PropTypes.string.isRequired,
     })
   ).isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 const styles = () => ({
