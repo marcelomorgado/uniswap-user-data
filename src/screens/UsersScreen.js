@@ -4,37 +4,39 @@ import UserTransactionsModal from "../components/container/UserTransactionsModal
 
 class UsersScreen extends React.Component {
   state = {
-    modalOpen: false,
+    txModalOpen: false,
     userId: null,
   };
 
-  handleOpen = () => {
-    this.setState({ modalOpen: true });
+  openTxModal = () => {
+    this.setState({ txModalOpen: true });
   };
 
-  handleClose = () => {
-    this.setState({ modalOpen: false });
+  closeTxModal = () => {
+    this.setState({ txModalOpen: false });
   };
 
   onRowClick = e => {
-    /* eslint-disable no-console */
     const { rowData: user } = e;
     const { id: userId } = user;
     this.setState({ userId });
     console.log(user);
-    this.handleOpen();
+    this.openTxModal();
   };
 
   render() {
+    const { state, openTxModal, closeTxModal, onRowClick } = this;
+    const { txModalOpen, userId } = state;
+
     return (
       <Fragment>
         <UserTransactionsModal
-          open={this.state.modalOpen}
-          handleOpen={this.handleOpen}
-          handleClose={this.handleClose}
-          userId={this.state.userId}
+          open={txModalOpen}
+          handleOpen={openTxModal}
+          handleClose={closeTxModal}
+          userId={userId}
         />
-        <UsersTableContainer onRowClick={this.onRowClick} />
+        <UsersTableContainer onRowClick={onRowClick} />
       </Fragment>
     );
   }
