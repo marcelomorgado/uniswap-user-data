@@ -10,21 +10,24 @@ function UsersInfiniteList({
   loadNextPage,
   onTransactionsClick,
 }) {
+  // eslint-disable-next-line react/prop-types
+  const rowRenderer = ({ item, style }) => {
+    return (
+      <User
+        style={style}
+        user={item}
+        handleTransactions={onTransactionsClick}
+      />
+    );
+  };
+
   return (
     <InfinityList
       items={items}
       loadNextPage={loadNextPage}
       hasNextPage={hasNextPage}
       isNextPageLoading={isNextPageLoading}
-      rowRender={({ item, style }) => {
-        return (
-          <User
-            style={style}
-            user={item}
-            handleTransactions={onTransactionsClick}
-          />
-        );
-      }}
+      rowRenderer={rowRenderer}
       rowHeight={200}
     />
   );

@@ -18,7 +18,6 @@ class UsersScreen extends React.Component {
 
   onRowClick = userId => {
     this.setState({ userId });
-    console.log(userId);
     this.openTxModal();
   };
 

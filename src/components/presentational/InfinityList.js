@@ -12,7 +12,7 @@ function InfiniteList({
   isNextPageLoading,
   items,
   loadNextPage,
-  rowRender,
+  rowRenderer,
   rowHeight,
 }) {
   const itemCount = hasNextPage ? items.length + 1 : items.length;
@@ -22,17 +22,13 @@ function InfiniteList({
   const isItemLoaded = index => !hasNextPage || index < items.length;
 
   // Render an item or a loading indicator.
+  // eslint-disable-next-line react/prop-types
   const Item = ({ index, style }) => {
     if (!isItemLoaded(index)) {
       return <div style={style}>{"Loading..."}</div>;
     }
     const item = items[index];
-    return rowRender({ item, style });
-  };
-
-  Item.propTypes = {
-    index: PropTypes.number.isRequired,
-    style: PropTypes.object.isRequired,
+    return rowRenderer({ item, style });
   };
 
   return (
@@ -62,7 +58,7 @@ InfiniteList.propTypes = {
   isNextPageLoading: PropTypes.bool.isRequired,
   loadNextPage: PropTypes.func.isRequired,
   items: PropTypes.array.isRequired,
-  rowRender: PropTypes.func.isRequired,
+  rowRenderer: PropTypes.func.isRequired,
   rowHeight: PropTypes.number.isRequired,
 };
 
