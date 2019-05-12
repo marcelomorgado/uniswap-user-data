@@ -57,6 +57,8 @@ class UserTransactionsModalContainer extends React.PureComponent {
     const { userId, open, handleClose } = this.props;
     const { hasNextPage, isNextPageLoading } = this.state;
 
+    if (!userId) return <></>;
+
     return (
       <Query
         query={GET_USER_TRANSACTIONS}
@@ -65,6 +67,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
+
           const { transactions } = data;
 
           if (!transactions.length) {

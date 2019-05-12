@@ -9,15 +9,18 @@ export default function TransactionsInfiniteList({
   items,
   loadNextPage,
 }) {
+  // eslint-disable-next-line react/prop-types
+  const rowRenderer = ({ item, style }) => {
+    return <Transaction transaction={item} style={style} />;
+  };
+
   return (
     <InfinityList
       items={items}
       loadNextPage={loadNextPage}
       hasNextPage={hasNextPage}
       isNextPageLoading={isNextPageLoading}
-      rowRender={({ item, style }) => {
-        return <Transaction transaction={item} style={style} />;
-      }}
+      rowRenderer={rowRenderer}
       rowHeight={30}
     />
   );

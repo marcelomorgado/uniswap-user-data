@@ -43,21 +43,13 @@ function User({ user, style, classes, handleTransactions }) {
       <CardActions>
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           className={classes.button}
           onClick={() => {
             handleTransactions(id);
           }}
         >
           Transactions
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.button}
-          onClick={() => {}}
-        >
-          Transfer from
         </Button>
       </CardActions>
     </Card>
@@ -71,5 +63,4 @@ User.propTypes = {
   handleTransactions: PropTypes.func.isRequired,
 };
 
-//export default User;
 export default withStyles(styles)(User);
