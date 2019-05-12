@@ -5,8 +5,27 @@ import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
 const GET_USER_TRANSACTIONS = gql`
+  query Transaction($userId: String!) {
+    transactions(first: 2, where: { user: $userId }) {
+      id
+      tx
+      event
+      block
+      timestamp
+      exchangeAddress
+      tokenAddress
+      tokenSymbol
+      user
+      ethAmount
+      tokenAmount
+      fee
+    }
+  }
+`;
+
+const GET_MORE_USER_TRANSACTIONS = gql`
   query Transaction($userId: String!, $cursor: String) {
-    transactions(first: 15, where: { user: $userId }, after: $cursor) {
+    transactions(first: 2, where: { user: $userId, id_lt: $cursor }) {
       id
       tx
       event
@@ -45,7 +64,9 @@ class UserTransactionsModal extends React.PureComponent {
             this.setState({ isNextPageLoading: true });
 
             return fetchMore({
+              query: GET_MORE_USER_TRANSACTIONS,
               variables: {
+                userId,
                 cursor,
               },
               updateQuery: (prevResult, { fetchMoreResult: newData }) => {
@@ -71,9 +92,6 @@ class UserTransactionsModal extends React.PureComponent {
             });
           };
 
-          const hasNextPage = true;
-          const isNextPageLoading = false;
-
           return (
             <TransactionsModal
               open={open}
@@ -81,8 +99,8 @@ class UserTransactionsModal extends React.PureComponent {
               userId={userId}
               transactions={transactions}
               onLoadMore={onLoadMore}
-              hasNextPage={hasNextPage}
-              isNextPageLoading={isNextPageLoading}
+              hasNextPage={this.state.hasNextPage}
+              isNextPageLoading={this.state.isNextPageLoading}
             />
           );
         }}
