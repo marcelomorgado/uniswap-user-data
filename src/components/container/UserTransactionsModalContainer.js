@@ -42,7 +42,7 @@ const GET_MORE_USER_TRANSACTIONS = gql`
   }
 `;
 
-class UserTransactionsModal extends React.PureComponent {
+class UserTransactionsModalContainer extends React.PureComponent {
   state = {
     hasNextPage: true,
     isNextPageLoading: false,
@@ -109,11 +109,11 @@ class UserTransactionsModal extends React.PureComponent {
   }
 }
 
-UserTransactionsModal.propTypes = {
+UserTransactionsModalContainer.propTypes = {
   open: PropTypes.bool.isRequired,
   handleOpen: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   userId: PropTypes.string,
 };
 
-export default UserTransactionsModal;
+export default UserTransactionsModalContainer;

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import UsersTableContainer from "../components/container/UsersTableContainer";
-import UserTransactionsModal from "../components/container/UserTransactionsModal";
+import UserTransactionsModalContainer from "../components/container/UserTransactionsModalContainer";
 
 class UsersScreen extends React.Component {
   state = {
@@ -30,7 +30,7 @@ class UsersScreen extends React.Component {
 
     return (
       <Fragment>
-        <UserTransactionsModal
+        <UserTransactionsModalContainer
           open={txModalOpen}
           handleOpen={openTxModal}
           handleClose={closeTxModal}
