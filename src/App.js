@@ -1,5 +1,5 @@
 import React from "react";
-import UsersScreen from "./components/container/UsersScreen";
+import UsersScreen from "./screens/UsersScreen";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 
