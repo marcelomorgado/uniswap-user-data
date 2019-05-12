@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TransactionsModal from "../presentational/TransactionsModal";
+import UserTransactionsModal from "../presentational/UserTransactionsModal";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
@@ -103,7 +103,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
           };
 
           return (
-            <TransactionsModal
+            <UserTransactionsModal
               open={open}
               handleClose={handleClose}
               userId={userId}

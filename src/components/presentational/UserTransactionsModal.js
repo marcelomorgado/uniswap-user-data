@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
 import TransactionsInfiniteList from "./TransactionsInfiniteList";
 
 function getModalStyle() {
@@ -19,7 +18,6 @@ function getModalStyle() {
 const modalStyles = theme => ({
   paper: {
     position: "absolute",
-    //width: theme.spacing.unit * 100,
     width: "80%",
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
@@ -28,7 +26,7 @@ const modalStyles = theme => ({
   },
 });
 
-class TransactionsModal extends React.Component {
+class UserTransactionsModal extends React.Component {
   render() {
     const {
       classes,
@@ -49,8 +47,6 @@ class TransactionsModal extends React.Component {
           onClose={handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <Button onClick={onLoadMore}>LoadMore</Button>
-
             <TransactionsInfiniteList
               items={transactions}
               loadNextPage={onLoadMore}
@@ -64,7 +60,7 @@ class TransactionsModal extends React.Component {
   }
 }
 
-TransactionsModal.propTypes = {
+UserTransactionsModal.propTypes = {
   classes: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
@@ -75,4 +71,4 @@ TransactionsModal.propTypes = {
   isNextPageLoading: PropTypes.bool.isRequired,
 };
 
-export default withStyles(modalStyles)(TransactionsModal);
+export default withStyles(modalStyles)(UserTransactionsModal);
