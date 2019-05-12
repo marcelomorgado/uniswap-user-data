@@ -6,6 +6,7 @@ import InfiniteLoader from "react-window-infinite-loader";
 // Component based on the react-window-infinite-loader documentation
 // See more:
 // https://github.com/bvaughn/react-window-infinite-loader
+// https://codesandbox.io/s/x70ly749rq
 function InfiniteList({
   hasNextPage,
   isNextPageLoading,
