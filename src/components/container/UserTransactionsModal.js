@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TransactionsModal from "../presentational/TransactionsModal";
-
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
@@ -24,50 +23,73 @@ const GET_USER_TRANSACTIONS = gql`
   }
 `;
 
-const UserTransactionsModal = ({ userId, open, handleOpen, handleClose }) => {
-  return (
-    <Query query={GET_USER_TRANSACTIONS} variables={{ userId }}>
-      {({ loading, error, data, fetchMore }) => {
-        if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error :(</p>;
-        const { transactions } = data;
+class UserTransactionsModal extends React.PureComponent {
+  state = {
+    hasNextPage: true,
+    isNextPageLoading: false,
+  };
 
-        const onLoadMore = () => {
-          const lastTransaction = transactions[transactions.length - 1];
-          const { id: cursor } = lastTransaction;
+  render() {
+    const { userId, open, handleClose } = this.props;
+    return (
+      <Query query={GET_USER_TRANSACTIONS} variables={{ userId }}>
+        {({ loading, error, data, fetchMore }) => {
+          if (loading) return <p>Loading...</p>;
+          if (error) return <p>Error :(</p>;
+          const { transactions } = data;
 
-          return fetchMore({
-            variables: {
-              cursor,
-            },
-            updateQuery: (prevResult, { fetchMoreResult: newData }) => {
-              const { transactions: prevTransactions } = prevResult;
-              const { transactions: newTransactions } = newData;
+          const onLoadMore = () => {
+            const lastTransaction = transactions[transactions.length - 1];
+            const { id: cursor } = lastTransaction;
 
-              if (!newData || !newTransactions.length) return prevResult;
+            this.setState({ isNextPageLoading: true });
 
-              const transactions = [...prevTransactions, ...newTransactions];
+            return fetchMore({
+              variables: {
+                cursor,
+              },
+              updateQuery: (prevResult, { fetchMoreResult: newData }) => {
+                const { transactions: prevTransactions } = prevResult;
+                const { transactions: newTransactions } = newData;
 
-              const data = { transactions };
-              return data;
-            },
-          });
-        };
+                let data;
+                if (!newData || !newTransactions.length) {
+                  data = prevResult;
+                  this.setState({ hasNextPage: false });
+                } else {
+                  const transactions = [
+                    ...prevTransactions,
+                    ...newTransactions,
+                  ];
 
-        return (
-          <TransactionsModal
-            open={open}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
-            userId={userId}
-            transactions={transactions}
-            onLoadMore={onLoadMore}
-          />
-        );
-      }}
-    </Query>
-  );
-};
+                  data = { transactions };
+                }
+
+                this.setState({ isNextPageLoading: false });
+                return data;
+              },
+            });
+          };
+
+          const hasNextPage = true;
+          const isNextPageLoading = false;
+
+          return (
+            <TransactionsModal
+              open={open}
+              handleClose={handleClose}
+              userId={userId}
+              transactions={transactions}
+              onLoadMore={onLoadMore}
+              hasNextPage={hasNextPage}
+              isNextPageLoading={isNextPageLoading}
+            />
+          );
+        }}
+      </Query>
+    );
+  }
+}
 
 UserTransactionsModal.propTypes = {
   open: PropTypes.bool.isRequired,
