@@ -1,6 +1,33 @@
 import React, { Fragment } from "react";
 import TransferEtherModal from "../presentational/TransferEtherModal";
 import TransferEtherButton from "../presentational/TransferEtherButton";
+import { ApolloConsumer } from "react-apollo";
+import { gql } from "apollo-boost";
+
+const GET_USER_TRANSACTIONS = gql`
+  query Transaction($userId: String!) {
+    transactions(where: { user: $userId }) {
+      id
+      tx
+      event
+      block
+      timestamp
+      exchangeAddress
+      tokenAddress
+      tokenSymbol
+      user
+      ethAmount
+      tokenAmount
+      fee
+    }
+  }
+`;
+
+const GET_TRANSACTIONS2 = gql`
+  {
+    transactions(where: { user: $userId }) @client
+  }
+`;
 
 class TransferEtherButtonContainer extends React.Component {
   state = {
@@ -15,12 +42,8 @@ class TransferEtherButtonContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  handleTransfer = (from, to) => {
-    console.log(`${from} -> ${to}`);
-  };
-
   render() {
-    const { state, openModal, closeModal, handleTransfer } = this;
+    const { state, openModal, closeModal } = this;
     const { modalOpen } = state;
     const onClick = () => {
       this.openModal();
@@ -29,12 +52,50 @@ class TransferEtherButtonContainer extends React.Component {
     return (
       <Fragment>
         <TransferEtherButton onClick={onClick} />
-        <TransferEtherModal
-          open={modalOpen}
-          handleOpen={openModal}
-          handleClose={closeModal}
-          handleTransfer={handleTransfer}
-        />
+
+        <ApolloConsumer>
+          {client => {
+            const handleTransfer = (from, to) => {
+              const data = client.readQuery({
+                query: GET_USER_TRANSACTIONS,
+                variables: {
+                  userId: from,
+                },
+              });
+              console.log(data);
+              // const newTx = {
+              //   id: "",
+              //   tx: "",
+              //   event: "",
+              //   block: "",
+              //   timestamp: "",
+              //   exchangeAddress: "",
+              //   tokenAddress: "",
+              //   tokenSymbol: "",
+              //   user: from,
+              //   ethAmount: "",
+              //   tokenAmount: "",
+              //   fee: "",
+              //   __typename: "Transaction",
+              // };
+              //
+              // client.writeQuery({
+              //   query: GET_TRANSACTIONS,
+              //   data: {
+              //     transactions: [newTx, ...data.transactions],
+              //   },
+              // });
+            };
+            return (
+              <TransferEtherModal
+                open={modalOpen}
+                handleOpen={openModal}
+                handleClose={closeModal}
+                handleTransfer={handleTransfer}
+              />
+            );
+          }}
+        </ApolloConsumer>
       </Fragment>
     );
   }
