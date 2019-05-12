@@ -1,6 +1,6 @@
 import React from "react";
 import UsersTable from "../presentational/UsersTable";
-import TransactionsModal from "../presentational/TransactionsModal";
+import UserTransactionsModal from "./UserTransactionsModal";
 
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
@@ -12,6 +12,14 @@ const usersToRows = users => {
 
   return rows;
 };
+
+const GET_USERS = gql`
+  {
+    users {
+      id
+    }
+  }
+`;
 
 class UsersScreen extends React.Component {
   state = {
@@ -38,15 +46,7 @@ class UsersScreen extends React.Component {
 
   render() {
     return (
-      <Query
-        query={gql`
-          {
-            users {
-              id
-            }
-          }
-        `}
-      >
+      <Query query={GET_USERS}>
         {({ loading, error, data }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
@@ -55,7 +55,7 @@ class UsersScreen extends React.Component {
 
           return (
             <>
-              <TransactionsModal
+              <UserTransactionsModal
                 open={this.state.modalOpen}
                 handleOpen={this.handleOpen}
                 handleClose={this.handleClose}

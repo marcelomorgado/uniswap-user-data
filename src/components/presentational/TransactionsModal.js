@@ -33,7 +33,15 @@ const styles = theme => ({
 
 class TransactionsModal extends React.Component {
   render() {
-    const { classes, handleOpen, handleClose, open, userId } = this.props;
+    const {
+      classes,
+      handleOpen,
+      handleClose,
+      open,
+      userId,
+      transactions,
+    } = this.props;
+    const { length: txAmount } = transactions;
 
     return (
       <div>
@@ -46,7 +54,7 @@ class TransactionsModal extends React.Component {
         >
           <div style={getModalStyle()} className={classes.paper}>
             <Typography variant="h6" id="modal-title">
-              {`User ID = ${userId}`}
+              {`User ID = ${userId} with ${txAmount} txs`}
             </Typography>
             <Typography variant="subtitle1" id="simple-modal-description">
               Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
@@ -64,6 +72,7 @@ TransactionsModal.propTypes = {
   handleOpen: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   userId: PropTypes.string,
+  transactions: PropTypes.array,
 };
 
 export default withStyles(styles)(TransactionsModal);
