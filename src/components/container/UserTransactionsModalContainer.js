@@ -4,9 +4,11 @@ import TransactionsModal from "../presentational/TransactionsModal";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 
+const ITEMS_PER_PAGE = 15;
+
 const GET_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!) {
-    transactions(first: 2, where: { user: $userId }) {
+  query Transaction($userId: String!, $itemsPerPage: Int) {
+    transactions(first: $itemsPerPage, where: { user: $userId }) {
       id
       tx
       event
@@ -24,8 +26,11 @@ const GET_USER_TRANSACTIONS = gql`
 `;
 
 const GET_MORE_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!, $cursor: String) {
-    transactions(first: 2, where: { user: $userId, id_lt: $cursor }) {
+  query Transaction($userId: String!, $cursor: String, $itemsPerPage: Int) {
+    transactions(
+      first: $itemsPerPage
+      where: { user: $userId, id_lt: $cursor }
+    ) {
       id
       tx
       event
@@ -51,7 +56,10 @@ class UserTransactionsModalContainer extends React.PureComponent {
   render() {
     const { userId, open, handleClose } = this.props;
     return (
-      <Query query={GET_USER_TRANSACTIONS} variables={{ userId }}>
+      <Query
+        query={GET_USER_TRANSACTIONS}
+        variables={{ userId, itemsPerPage: ITEMS_PER_PAGE }}
+      >
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
@@ -63,32 +71,32 @@ class UserTransactionsModalContainer extends React.PureComponent {
 
             this.setState({ isNextPageLoading: true });
 
+            const updateQuery = (prevResult, { fetchMoreResult: newData }) => {
+              const { transactions: prevTransactions } = prevResult;
+              const { transactions: newTransactions } = newData;
+              const hasNewData = newTransactions.length;
+              let data;
+
+              if (!hasNewData) {
+                data = prevResult;
+                this.setState({ hasNextPage: false });
+              } else {
+                const transactions = [...prevTransactions, ...newTransactions];
+                data = { transactions };
+              }
+
+              this.setState({ isNextPageLoading: false });
+              return data;
+            };
+
             return fetchMore({
               query: GET_MORE_USER_TRANSACTIONS,
               variables: {
                 userId,
                 cursor,
+                itemsPerPage: ITEMS_PER_PAGE,
               },
-              updateQuery: (prevResult, { fetchMoreResult: newData }) => {
-                const { transactions: prevTransactions } = prevResult;
-                const { transactions: newTransactions } = newData;
-
-                let data;
-                if (!newData || !newTransactions.length) {
-                  data = prevResult;
-                  this.setState({ hasNextPage: false });
-                } else {
-                  const transactions = [
-                    ...prevTransactions,
-                    ...newTransactions,
-                  ];
-
-                  data = { transactions };
-                }
-
-                this.setState({ isNextPageLoading: false });
-                return data;
-              },
+              updateQuery,
             });
           };
 
