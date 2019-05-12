@@ -57,6 +57,8 @@ class UserTransactionsModalContainer extends React.PureComponent {
     const { userId, open, handleClose } = this.props;
     const { hasNextPage, isNextPageLoading } = this.state;
 
+    if (!userId) return <></>;
+
     return (
       <Query
         query={GET_USER_TRANSACTIONS}
