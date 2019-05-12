@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { FixedSizeList as List } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
+import Transaction from "./Transaction";
 
 export default function TransactionsInfiniteList({
   // Are there more items to load?
@@ -30,14 +31,11 @@ export default function TransactionsInfiniteList({
 
   // Render an item or a loading indicator.
   const Item = ({ index, style }) => {
-    let content;
     if (!isItemLoaded(index)) {
-      content = "Loading...";
-    } else {
-      content = items[index].tx;
+      return <div style={style}>{"Loading..."}</div>;
     }
-
-    return <div style={style}>{content}</div>;
+    const transaction = items[index];
+    return <Transaction style={style} transaction={transaction} />;
   };
 
   Item.propTypes = {
@@ -54,12 +52,11 @@ export default function TransactionsInfiniteList({
       {({ onItemsRendered, ref }) => (
         <List
           className="List"
-          height={150}
+          height={300}
           itemCount={itemCount}
           itemSize={30}
           onItemsRendered={onItemsRendered}
           ref={ref}
-          width={300}
         >
           {Item}
         </List>
