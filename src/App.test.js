@@ -6,8 +6,7 @@ import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { gql } from "apollo-boost";
 import BigNumber from "bignumber.js";
-import TransactionEvent from "./constants/TransactionEvent";
-const { TokenPurchase, EthPurchase, RemoveLiquidity } = TransactionEvent;
+import { toTokenTransactions, toEtherTransactions } from "./helpers";
 import { IN, OUT } from "./constants/TransactionType";
 
 import ApolloClient from "apollo-client";
@@ -72,58 +71,16 @@ const getUserTransactions = async userID => {
   return transactions;
 };
 
-// Note:
-// For each type of uniswap transactions I'm assuming that rule:
-//
-// TokenPurchase: ETH OUT + TOKEN IN
-// EthPurchase: ETH IN + TOKEN OUT
-// AddLiquidity: ETH OUT + TOKEN OUT
-// RemoveLiquidity: ETH IN + TOKEN IN
-const getEtherTransactionType = tx => {
-  const { event: txEvent } = tx;
-
-  if (!TransactionEvent[txEvent]) {
-    throw Error(`Unexpected transaction event: ${txEvent}`);
-  }
-
-  const type =
-    txEvent === EthPurchase || txEvent === RemoveLiquidity ? IN : OUT;
-  return type;
-};
-
-const getTokenTransactionType = tx => {
-  const { event: txEvent } = tx;
-
-  if (!TransactionEvent[txEvent]) {
-    throw Error(`Unexpected transaction event: ${txEvent}`);
-  }
-
-  const type =
-    txEvent === TokenPurchase || txEvent === RemoveLiquidity ? IN : OUT;
-
-  return type;
-};
-
 const getUserTokenTransactions = async userID => {
   const userTransactions = await getUserTransactions(userID);
 
-  return userTransactions.map(tx => {
-    const { tx: txHash, user, tokenAddress, tokenAmount: amount } = tx;
-    const type = getTokenTransactionType(tx);
-    return { txHash, type, tokenAddress, user, amount };
-  });
+  return toTokenTransactions(userTransactions);
 };
 
 const getUserEtherTransactions = async userID => {
   const userTransactions = await getUserTransactions(userID);
 
-  return userTransactions.map(tx => {
-    const { tx: txHash, user, ethAmount: amount } = tx;
-    // Note: If is an ETH tx, tokenAddress will be '0x'
-    const tokenAddress = "0x";
-    const type = getEtherTransactionType(tx);
-    return { txHash, type, tokenAddress, user, amount };
-  });
+  return toEtherTransactions(userTransactions);
 };
 
 const extractBalanceFromTransactions = transactions => {
