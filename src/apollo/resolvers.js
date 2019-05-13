@@ -34,8 +34,6 @@ import BigNumber from "bignumber.js";
 // };
 
 const sendEther = async (_, { from, to, amount }, { cache }) => {
-  const amountBN = new BigNumber(amount);
-
   const data = cache.readQuery({
     query: GET_USERS,
     variables: {
@@ -43,29 +41,35 @@ const sendEther = async (_, { from, to, amount }, { cache }) => {
     },
   });
 
-  // Subtracting
-  data.users = data.users.map(user => {
-    const { id: userId, etherBalance } = user;
-    if (userId === from) {
-      const etherBalanceBN = new BigNumber(etherBalance);
-      const newBalance = etherBalanceBN.minus(amountBN).toString();
-      user = { ...user, etherBalance: newBalance };
-    }
-
+  // Tech-debt: DRY function
+  const addToEtherBalance = (user, amount) => {
+    const amountBN = new BigNumber(amount);
+    let { etherBalance } = user;
+    const etherBalanceBN = new BigNumber(etherBalance);
+    etherBalance = etherBalanceBN.plus(amountBN).toString();
+    user = { ...user, etherBalance };
     return user;
-  });
+  };
+
+  // Tech-debt: DRY function
+  const subtractFromEtherBalance = (user, amount) => {
+    const amountBN = new BigNumber(amount);
+    let { etherBalance } = user;
+    const etherBalanceBN = new BigNumber(etherBalance);
+    etherBalance = etherBalanceBN.minus(amountBN).toString();
+    user = { ...user, etherBalance };
+    return user;
+  };
+
+  // Subtracting
+  data.users = data.users.map(user =>
+    user.id === from ? subtractFromEtherBalance(user, amount) : user
+  );
 
   // Adding
-  data.users = data.users.map(user => {
-    const { id: userId, etherBalance } = user;
-    if (userId === to) {
-      const etherBalanceBN = new BigNumber(etherBalance);
-      const newBalance = etherBalanceBN.plus(amountBN).toString();
-      user = { ...user, etherBalance: newBalance };
-    }
-
-    return user;
-  });
+  data.users = data.users.map(user =>
+    user.id === to ? addToEtherBalance(user, amount) : user
+  );
 
   await cache.writeQuery({
     query: GET_USERS,
