@@ -53,7 +53,7 @@ const subtractFromEtherBalance = (user, amount) => {
   return user;
 };
 
-const sendEther = async (_, { from, to, amount }, { cache }) => {
+const updateBalances = async ({ from, to, amount }, cache) => {
   const data = cache.readQuery({
     query: GET_USERS,
     variables: {
@@ -76,6 +76,10 @@ const sendEther = async (_, { from, to, amount }, { cache }) => {
     },
     data,
   });
+};
+
+const sendEther = async (_, args, { cache }) => {
+  await updateBalances(args, cache);
 
   return null;
 };
