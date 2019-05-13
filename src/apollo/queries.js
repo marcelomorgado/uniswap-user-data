@@ -44,15 +44,11 @@ export const GET_USER_TRANSACTIONS = gql`
       id
       tx
       event
-      block
-      timestamp
-      exchangeAddress
       tokenAddress
       tokenSymbol
       user
       ethAmount
       tokenAmount
-      fee
     }
   }
 `;
@@ -66,15 +62,11 @@ export const GET_MORE_USER_TRANSACTIONS = gql`
       id
       tx
       event
-      block
-      timestamp
-      exchangeAddress
       tokenAddress
       tokenSymbol
       user
       ethAmount
       tokenAmount
-      fee
     }
   }
 `;

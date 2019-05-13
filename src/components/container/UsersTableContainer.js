@@ -1,5 +1,4 @@
 import React from "react";
-//import UsersTable from "../presentational/UsersTable";
 import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
