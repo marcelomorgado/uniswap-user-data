@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the component 1`] = `
+<InfiniteList
+  hasNextPage={false}
+  isNextPageLoading={false}
+  items={Array []}
+  loadNextPage={[Function]}
+  rowHeight={200}
+  rowRenderer={[Function]}
+/>
+`;

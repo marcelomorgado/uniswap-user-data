@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the component 1`] = `
+<div
+  style={Object {}}
+>
+  <div>
+    txHash
+     - 
+    EthPurchase
+     - 
+    0x
+     - 
+    0x123User
+     - 
+    1
+  </div>
+</div>
+`;
