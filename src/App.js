@@ -9,6 +9,11 @@ import { resolvers, typeDefs } from "./apollo/resolvers";
 // https://www.apollographql.com/docs/react/recipes/client-schema-mocking
 const cache = new InMemoryCache();
 
+// link: createHttpLink({
+//   uri: "https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap",
+//   fetch: fetch,
+// }),
+
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/graphprotocol/uniswap",
   cache,
