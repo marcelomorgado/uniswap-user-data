@@ -7,10 +7,7 @@ import {
   GET_USER_TRANSACTIONS,
   TRANSACTIONS_PER_PAGE as itemsPerPage,
 } from "../../apollo/queries";
-import {
-  //toTokenTransactions,
-  toEtherTransactions,
-} from "../../helpers";
+import { toTokenTransactions, toEtherTransactions } from "../../helpers";
 
 class UserTransactionsModalContainer extends React.PureComponent {
   state = {
@@ -79,6 +76,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
                 };
 
           const etherTransactions = toEtherTransactions(transactions);
+          const tokenTransactions = toTokenTransactions(transactions);
 
           return (
             <UserTransactionsModal
@@ -86,6 +84,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
               handleClose={handleClose}
               userId={userId}
               etherTransactions={etherTransactions}
+              tokenTransactions={tokenTransactions}
               onLoadMore={onLoadMore}
               hasNextPage={hasNextPage}
               isNextPageLoading={isNextPageLoading}
