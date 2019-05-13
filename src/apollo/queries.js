@@ -20,18 +20,6 @@ export const GET_MORE_USERS = gql`
   }
 `;
 
-// export const UPDATE_USERS = gql`
-//   mutation updateUsers($users: [User]!) {
-//     updateUsers(users: $users) @client
-//   }
-// `;
-//
-// export const UPDATE_USER = gql`
-//   mutation updateUserEtherBalance($userId: String!, $etherBalance: String) {
-//     updateUserEtherBalance(userId: $userId, etherBalance: $etherBalance) @client
-//   }
-// `;
-
 export const SEND_ETHER = gql`
   mutation sendEther($from: String!, $to: String!, $amount: String) {
     sendEther(from: $from, to: $to, amount: $amount) @client
@@ -75,8 +63,6 @@ export const GET_MORE_USER_TRANSACTIONS = gql`
 
 export default {
   GET_USERS,
-  // UPDATE_USERS,
-  // UPDATE_USER,
   GET_MORE_USERS,
   TRANSACTIONS_PER_PAGE,
   GET_MORE_USER_TRANSACTIONS,

@@ -5,43 +5,7 @@ import {
   TRANSACTIONS_PER_PAGE,
 } from "./queries";
 import BigNumber from "bignumber.js";
-import {
-  TokenPurchase,
-  EthPurchase,
-  AddLiquidity,
-  RemoveLiquidity,
-} from "../constants/TransactionEvent";
-// const updateUsers = async (_, { users }, { cache }) => {
-//   await cache.writeData({ data: { users } });
-//   return null;
-// };
-//
-// const updateUserEtherBalance = async (
-//   _,
-//   { userId, etherBalance },
-//   { cache }
-// ) => {
-//   const data = cache.readQuery({
-//     query: GET_USERS,
-//     variables: {
-//       itemsPerPage: USERS_PER_PAGE,
-//     },
-//   });
-//
-//   data.users = data.users.map(u => {
-//     return u.id !== userId ? u : { ...u, etherBalance };
-//   });
-//
-//   await cache.writeQuery({
-//     query: GET_USERS,
-//     variables: {
-//       itemsPerPage: 20,
-//     },
-//     data,
-//   });
-//
-//   return null;
-// };
+import { TokenPurchase, EthPurchase } from "../constants/TransactionEvent";
 
 // Tech-debt: DRY function
 const addToEtherBalance = (user, amount) => {
@@ -88,49 +52,69 @@ const updateBalances = async ({ from, to, amount }, cache) => {
   });
 };
 
-const sendEther = async (_, { from, to, amount }, { cache }) => {
-  await updateBalances({ from, to, amount }, cache);
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
 
-  // TXs
+const insertTransaction = async ({ tx, userId }, cache) => {
+  let data;
+
   try {
-    const data = cache.readQuery({
+    data = cache.readQuery({
       query: GET_USER_TRANSACTIONS,
       variables: {
-        userId: from,
+        userId,
         itemsPerPage: TRANSACTIONS_PER_PAGE,
       },
     });
+  } catch (error) {
+    data = { transactions: [] };
+  }
 
-    const tx = {
-      id: "1234",
+  // Tech debt: How is the best way to pick up a temp ID?
+  const tempId = getRandomInt(1000000, 10000000);
+
+  tx = { ...tx, id: `${tempId}` };
+  data.transactions = [tx, ...data.transactions];
+
+  await cache.writeQuery({
+    query: GET_USER_TRANSACTIONS,
+    variables: {
+      userId,
+      itemsPerPage: TRANSACTIONS_PER_PAGE,
+    },
+    data,
+  });
+};
+
+const sendEther = async (_, { from, to, amount }, { cache }) => {
+  await updateBalances({ from, to, amount }, cache);
+
+  try {
+    const baseTx = {
       tx: "txhash",
-      event: TokenPurchase,
       tokenAddress: "0x123",
       tokenSymbol: "DAI",
-      user: from,
       ethAmount: amount,
       tokenAmount: "0",
       __typename: "Transaction",
     };
 
-    data.transactions = [tx, ...data.transactions];
+    const fromTx = {
+      ...baseTx,
+      event: TokenPurchase,
+      user: from,
+    };
+    const toTx = {
+      ...baseTx,
+      event: EthPurchase,
+      user: to,
+    };
 
-    // data.users = data.users.map(user =>
-    //   user.id === from ? subtractFromEtherBalance(user, amount) : user
-    // );
-    //
-    // data.users = data.users.map(user =>
-    //   user.id === to ? addToEtherBalance(user, amount) : user
-    // );
-
-    await cache.writeQuery({
-      query: GET_USER_TRANSACTIONS,
-      variables: {
-        userId: from,
-        itemsPerPage: TRANSACTIONS_PER_PAGE,
-      },
-      data,
-    });
+    await insertTransaction({ tx: fromTx, userId: from }, cache);
+    await insertTransaction({ tx: toTx, userId: to }, cache);
   } catch (error) {
     console.log(error);
   }
@@ -148,16 +132,8 @@ export const typeDefs = `
   }
 `;
 
-// type Mutation {
-//   updateUsers(users: [User]!)
-//   updateUserEtherBalance(userId: String!, etherBalance: String)
-//   sendEther(from: String!, to: String!, amount: String)
-// }
-
 export const resolvers = {
   Mutation: {
-    // updateUsers,
-    // updateUserEtherBalance,
     sendEther,
   },
   User: {
