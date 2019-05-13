@@ -4,6 +4,7 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { GET_USERS, USERS_PER_PAGE } from "./queries";
+import BigNumber from "bignumber.js";
 
 //https://github.com/apollographql/fullstack-tutorial
 // https://www.apollographql.com/docs/react/recipes/client-schema-mocking
@@ -50,6 +51,8 @@ const resolvers = {
       return null;
     },
     sendEther: async (_, { from, to, amount }, { cache }) => {
+      const amountBN = new BigNumber(amount);
+
       const data = cache.readQuery({
         query: GET_USERS,
         variables: {
@@ -61,7 +64,8 @@ const resolvers = {
       data.users = data.users.map(user => {
         const { id: userId, etherBalance } = user;
         if (userId === from) {
-          const newBalance = "9";
+          const etherBalanceBN = new BigNumber(etherBalance);
+          const newBalance = etherBalanceBN.minus(amountBN).toString();
           user = { ...user, etherBalance: newBalance };
         }
 
@@ -72,7 +76,8 @@ const resolvers = {
       data.users = data.users.map(user => {
         const { id: userId, etherBalance } = user;
         if (userId === to) {
-          const newBalance = "11";
+          const etherBalanceBN = new BigNumber(etherBalance);
+          const newBalance = etherBalanceBN.plus(amountBN).toString();
           user = { ...user, etherBalance: newBalance };
         }
 

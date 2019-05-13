@@ -39,11 +39,13 @@ class TransferEtherButtonContainer extends React.Component {
               //   },
               // });
 
+              console.log(`${from} -> ${to}`);
+
               client.mutate({
                 mutation: SEND_ETHER,
                 variables: {
-                  from: "0x0000000000000000000000000000000000000000",
-                  to: "0x0000000000c90bc353314b6911180ed7e06019a9",
+                  from,
+                  to,
                   amount: "1",
                 },
               });
