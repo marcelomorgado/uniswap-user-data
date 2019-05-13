@@ -2,50 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserTransactionsModal from "../presentational/UserTransactionsModal";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
+import {
+  GET_MORE_USER_TRANSACTIONS,
+  GET_USER_TRANSACTIONS,
+} from "../../queries";
 
 const ITEMS_PER_PAGE = 15;
-
-const GET_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!, $itemsPerPage: Int) {
-    transactions(first: $itemsPerPage, where: { user: $userId }) {
-      id
-      tx
-      event
-      block
-      timestamp
-      exchangeAddress
-      tokenAddress
-      tokenSymbol
-      user
-      ethAmount
-      tokenAmount
-      fee
-    }
-  }
-`;
-
-const GET_MORE_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!, $cursor: String, $itemsPerPage: Int) {
-    transactions(
-      first: $itemsPerPage
-      where: { user: $userId, id_lt: $cursor }
-    ) {
-      id
-      tx
-      event
-      block
-      timestamp
-      exchangeAddress
-      tokenAddress
-      tokenSymbol
-      user
-      ethAmount
-      tokenAmount
-      fee
-    }
-  }
-`;
 
 class UserTransactionsModalContainer extends React.PureComponent {
   state = {

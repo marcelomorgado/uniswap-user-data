@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import UsersTableContainer from "../components/container/UsersTableContainer";
 import UserTransactionsModalContainer from "../components/container/UserTransactionsModalContainer";
-import TransferEtherButton from "../components/presentational/TransferEtherButton";
+import TransferEtherButtonContainer from "../components/container/TransferEtherButtonContainer";
 
 class UsersScreen extends React.Component {
   state = {
@@ -28,7 +28,7 @@ class UsersScreen extends React.Component {
 
     return (
       <Fragment>
-        <TransferEtherButton onClick={() => {}} />
+        <TransferEtherButtonContainer />
         <UserTransactionsModalContainer
           open={txModalOpen}
           handleOpen={openTxModal}

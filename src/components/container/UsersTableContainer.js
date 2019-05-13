@@ -3,25 +3,7 @@ import React from "react";
 import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
-
-const ITEMS_PER_PAGE = 20;
-
-const GET_USERS = gql`
-  query User($itemsPerPage: Int) {
-    users(first: $itemsPerPage) {
-      id
-    }
-  }
-`;
-
-const GET_MORE_USERS = gql`
-  query User($cursor: String, $itemsPerPage: Int) {
-    users(first: $itemsPerPage, where: { id_gt: $cursor }) {
-      id
-    }
-  }
-`;
+import { GET_USERS, GET_MORE_USERS, USERS_PER_PAGE } from "../../queries";
 
 class UsersTableContainer extends React.Component {
   state = {
@@ -33,11 +15,12 @@ class UsersTableContainer extends React.Component {
     const { hasNextPage, isNextPageLoading } = this.state;
     const { onRowClick } = this.props;
     return (
-      <Query query={GET_USERS} variables={{ itemsPerPage: ITEMS_PER_PAGE }}>
+      <Query query={GET_USERS} variables={{ itemsPerPage: USERS_PER_PAGE }}>
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
           const { users } = data;
+          if (users.length === 1) console.log(users[0]);
 
           if (!users.length) {
             this.setState({ hasNextPage: false });
@@ -71,7 +54,7 @@ class UsersTableContainer extends React.Component {
               query: GET_MORE_USERS,
               variables: {
                 cursor,
-                itemsPerPage: ITEMS_PER_PAGE,
+                itemsPerPage: USERS_PER_PAGE,
               },
               updateQuery,
             });
