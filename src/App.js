@@ -3,6 +3,7 @@ import UsersScreen from "./screens/UsersScreen";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { GET_USERS, USERS_PER_PAGE } from "./queries";
 
 //https://github.com/apollographql/fullstack-tutorial
 // https://www.apollographql.com/docs/react/recipes/client-schema-mocking
@@ -16,6 +17,7 @@ const typeDefs = `
   type Mutation {
     updateUsers(users: [User]!)
     updateUserEtherBalance(userId: String!, etherBalance: String)
+    sendEther(from: String!, to: String!, amount: String)
   }
 `;
 
@@ -26,13 +28,70 @@ const resolvers = {
       return null;
     },
     updateUserEtherBalance: async (_, { userId, etherBalance }, { cache }) => {
-      //await cache.writeData({ data: { userId } });
+      const data = cache.readQuery({
+        query: GET_USERS,
+        variables: {
+          itemsPerPage: USERS_PER_PAGE,
+        },
+      });
+
+      data.users = data.users.map(u => {
+        return u.id !== userId ? u : { ...u, etherBalance };
+      });
+
+      await cache.writeQuery({
+        query: GET_USERS,
+        variables: {
+          itemsPerPage: 20,
+        },
+        data,
+      });
+
+      return null;
+    },
+    sendEther: async (_, { from, to, amount }, { cache }) => {
+      const data = cache.readQuery({
+        query: GET_USERS,
+        variables: {
+          itemsPerPage: USERS_PER_PAGE,
+        },
+      });
+
+      // Subtracting
+      data.users = data.users.map(user => {
+        const { id: userId, etherBalance } = user;
+        if (userId === from) {
+          const newBalance = "9";
+          user = { ...user, etherBalance: newBalance };
+        }
+
+        return user;
+      });
+
+      // Adding
+      data.users = data.users.map(user => {
+        const { id: userId, etherBalance } = user;
+        if (userId === to) {
+          const newBalance = "11";
+          user = { ...user, etherBalance: newBalance };
+        }
+
+        return user;
+      });
+
+      await cache.writeQuery({
+        query: GET_USERS,
+        variables: {
+          itemsPerPage: USERS_PER_PAGE,
+        },
+        data,
+      });
 
       return null;
     },
   },
   User: {
-    etherBalance: () => "0",
+    etherBalance: () => "10",
   },
 };
 

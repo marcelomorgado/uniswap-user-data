@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import TransferEtherModal from "../presentational/TransferEtherModal";
 import TransferEtherButton from "../presentational/TransferEtherButton";
 import { ApolloConsumer } from "react-apollo";
-import { GET_USERS, UPDATE_USERS } from "../../queries";
+import { SEND_ETHER } from "../../queries";
 
 class TransferEtherButtonContainer extends React.Component {
   state = {
@@ -31,46 +31,20 @@ class TransferEtherButtonContainer extends React.Component {
         <ApolloConsumer>
           {client => {
             const handleTransfer = async (from, to) => {
-              const users = [
-                {
-                  id: "0x8999999999999999999999999999999999999999",
-                  etherBalance: "999",
-                  __typename: "User",
-                },
-              ];
+              // client.mutate({
+              //   mutation: UPDATE_USER,
+              //   variables: {
+              //     userId: "0x0000000000000000000000000000000000000000",
+              //     etherBalance: "123",
+              //   },
+              // });
 
               client.mutate({
-                mutation: UPDATE_USERS,
+                mutation: SEND_ETHER,
                 variables: {
-                  users,
-                },
-                optimisticResponse: {
-                  users,
-                },
-                //https://medium.freecodecamp.org/how-to-update-the-apollo-clients-cache-after-a-mutation-79a0df79b840
-                update: (proxy, { data: { users } }) => {
-                  try {
-                    if (!users) return;
-
-                    const data = proxy.readQuery({
-                      query: GET_USERS,
-                      variables: {
-                        itemsPerPage: 20,
-                      },
-                    });
-
-                    data.users = users;
-
-                    proxy.writeQuery({
-                      query: GET_USERS,
-                      variables: {
-                        itemsPerPage: 20,
-                      },
-                      data,
-                    });
-                  } catch (error) {
-                    console.log(error);
-                  }
+                  from: "0x0000000000000000000000000000000000000000",
+                  to: "0x0000000000c90bc353314b6911180ed7e06019a9",
+                  amount: "1",
                 },
               });
             };
