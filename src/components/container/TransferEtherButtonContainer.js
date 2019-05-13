@@ -24,6 +24,7 @@ const GET_USERS = gql`
   query User($itemsPerPage: Int) {
     users(first: $itemsPerPage) {
       id
+      etherBalance @client
     }
   }
 `;
@@ -101,19 +102,12 @@ class TransferEtherButtonContainer extends React.Component {
             const handleTransfer = async (from, to) => {
               const users = [
                 {
-                  id: "0x9999999999999999999999999999999999999999",
+                  id: "0x8999999999999999999999999999999999999999",
+                  etherBalance: "999",
                   __typename: "User",
                 },
               ];
 
-              // client.writeQuery({
-              //   query: GET_USERS,
-              //   // variables: {
-              //   //   first: 20,
-              //   // },
-              //   data: { users },
-              // });
-              //
               client.mutate({
                 mutation: UPDATE_USERS,
                 variables: {
@@ -134,8 +128,7 @@ class TransferEtherButtonContainer extends React.Component {
                 update: (proxy, { data: { users } }) => {
                   try {
                     if (!users) return;
-                    //    console.log(updateUsers.users);
-                    // Read the data from our cache for this query.
+
                     const data = proxy.readQuery({
                       query: GET_USERS,
                       variables: {
@@ -144,9 +137,7 @@ class TransferEtherButtonContainer extends React.Component {
                     });
 
                     data.users = users;
-                    // Add our comment from the mutation to the end.
-                    //data.users = [];
-                    // Write our data back to the cache.
+
                     proxy.writeQuery({
                       query: GET_USERS,
                       variables: {
@@ -154,74 +145,11 @@ class TransferEtherButtonContainer extends React.Component {
                       },
                       data,
                     });
-
-                    //client.queryManager.refetchQueryByName()
-
-                    //client.queryManager.broadcastQueries();
                   } catch (error) {
                     console.log(error);
                   }
                 },
               });
-
-              // const newTx = {
-              //   id: "12346",
-              //   user: "0x0000000000000000000000000000000000000000",
-              //   __typename: "Transaction",
-              // };
-              //
-              // client.writeData({ data: { transactions: [newTx] } });
-
-              // const fromTxs = client.readFragment({
-              //   user: from,
-              //   fragment: gql`
-              //     fragment userTransactions on transactions {
-              //       id
-              //       tx
-              //       event
-              //       block
-              //       timestamp
-              //       exchangeAddress
-              //       tokenAddress
-              //       tokenSymbol
-              //       user
-              //       ethAmount
-              //       tokenAmount
-              //       fee
-              //     }
-              //   `,
-              // });
-
-              const { data } = await client.query({
-                query: GET_USERS,
-                // variables: {
-                //   userId: "0x0000000000000000000000000000000000000000",
-                //   itemsPerPage: 15,
-                // },
-              });
-              console.log(data);
-              // const newTx = {
-              //   id: "",
-              //   tx: "",
-              //   event: "",
-              //   block: "",
-              //   timestamp: "",
-              //   exchangeAddress: "",
-              //   tokenAddress: "",
-              //   tokenSymbol: "",
-              //   user: from,
-              //   ethAmount: "",
-              //   tokenAmount: "",
-              //   fee: "",
-              //   __typename: "Transaction",
-              // };
-              //
-              // client.writeQuery({
-              //   query: GET_TRANSACTIONS,
-              //   data: {
-              //     transactions: [newTx, ...data.transactions],
-              //   },
-              // });
             };
             return (
               <TransferEtherModal

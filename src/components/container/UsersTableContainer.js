@@ -4,7 +4,6 @@ import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
-import Button from "@material-ui/core/Button";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -12,6 +11,7 @@ const GET_USERS = gql`
   query User($itemsPerPage: Int) {
     users(first: $itemsPerPage) {
       id
+      etherBalance @client
     }
   }
 `;
@@ -20,6 +20,7 @@ const GET_MORE_USERS = gql`
   query User($cursor: String, $itemsPerPage: Int) {
     users(first: $itemsPerPage, where: { id_gt: $cursor }) {
       id
+      etherBalance @client
     }
   }
 `;
@@ -35,11 +36,11 @@ class UsersTableContainer extends React.Component {
     const { onRowClick } = this.props;
     return (
       <Query query={GET_USERS} variables={{ itemsPerPage: ITEMS_PER_PAGE }}>
-        {({ loading, error, data, fetchMore, refetch }) => {
+        {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
           const { users } = data;
-          console.log(`running, users = ${users.length}`);
+          if (users.length === 1) console.log(users[0]);
 
           if (!users.length) {
             this.setState({ hasNextPage: false });
@@ -79,22 +80,13 @@ class UsersTableContainer extends React.Component {
             });
           };
           return (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => refetch()}
-              >
-                Refetch
-              </Button>
-              <UsersInfinityList
-                items={users}
-                loadNextPage={onLoadMore}
-                hasNextPage={hasNextPage}
-                isNextPageLoading={isNextPageLoading}
-                onTransactionsClick={onRowClick}
-              />
-            </>
+            <UsersInfinityList
+              items={users}
+              loadNextPage={onLoadMore}
+              hasNextPage={hasNextPage}
+              isNextPageLoading={isNextPageLoading}
+              onTransactionsClick={onRowClick}
+            />
           );
         }}
       </Query>
