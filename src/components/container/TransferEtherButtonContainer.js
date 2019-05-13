@@ -4,9 +4,25 @@ import TransferEtherButton from "../presentational/TransferEtherButton";
 import { ApolloConsumer } from "react-apollo";
 import { gql } from "apollo-boost";
 
+// const GET_USERS = gql`
+//   query User {
+//     users @client {
+//       id
+//     }
+//   }
+// `;
+
+const GET_USERS = gql`
+  query User {
+    users @client {
+      id
+    }
+  }
+`;
+
 const GET_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!) {
-    transactions(where: { user: $userId }) {
+  query Transaction($userId: String!, $itemsPerPage: Int) {
+    transactions(first: $itemsPerPage, where: { user: $userId }) {
       id
       tx
       event
@@ -24,8 +40,23 @@ const GET_USER_TRANSACTIONS = gql`
 `;
 
 const GET_TRANSACTIONS2 = gql`
-  {
+  query Transaction($userId: String!) {
     transactions(where: { user: $userId }) @client
+  }
+`;
+
+const GET_TRANSACTIONS3 = gql`
+  query Transaction {
+    transactions @client {
+      id
+      user
+    }
+  }
+`;
+
+const UPDATE_USERS = gql`
+  mutation updateUsers($users: [User]!) {
+    updateUsers(users: $users) @client
   }
 `;
 
@@ -55,12 +86,54 @@ class TransferEtherButtonContainer extends React.Component {
 
         <ApolloConsumer>
           {client => {
-            const handleTransfer = (from, to) => {
-              const data = client.readQuery({
-                query: GET_USER_TRANSACTIONS,
+            const handleTransfer = async (from, to) => {
+              client.mutate({
+                mutation: UPDATE_USERS,
                 variables: {
-                  userId: from,
+                  users: [
+                    {
+                      id: 1,
+
+                      __typename: "User",
+                    },
+                  ],
                 },
+              });
+
+              // const newTx = {
+              //   id: "12346",
+              //   user: "0x0000000000000000000000000000000000000000",
+              //   __typename: "Transaction",
+              // };
+              //
+              // client.writeData({ data: { transactions: [newTx] } });
+
+              // const fromTxs = client.readFragment({
+              //   user: from,
+              //   fragment: gql`
+              //     fragment userTransactions on transactions {
+              //       id
+              //       tx
+              //       event
+              //       block
+              //       timestamp
+              //       exchangeAddress
+              //       tokenAddress
+              //       tokenSymbol
+              //       user
+              //       ethAmount
+              //       tokenAmount
+              //       fee
+              //     }
+              //   `,
+              // });
+
+              const { data } = await client.query({
+                query: GET_USERS,
+                // variables: {
+                //   userId: "0x0000000000000000000000000000000000000000",
+                //   itemsPerPage: 15,
+                // },
               });
               console.log(data);
               // const newTx = {
