@@ -1,5 +1,5 @@
 import React from "react";
-import UsersInfinityList from "../presentational/UsersInfinityList";
+import UsersList from "../presentational/UsersList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import {
@@ -66,7 +66,7 @@ class UsersTableContainer extends React.Component {
                   });
                 };
           return (
-            <UsersInfinityList
+            <UsersList
               items={users}
               loadNextPage={onLoadMore}
               hasNextPage={hasNextPage}

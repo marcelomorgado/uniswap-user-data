@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import InfinityList from "./InfinityList";
 import User from "./User";
 
-function UsersInfiniteList({
+function UsersList({
   hasNextPage,
   isNextPageLoading,
   items,
@@ -33,7 +33,7 @@ function UsersInfiniteList({
   );
 }
 
-UsersInfiniteList.propTypes = {
+UsersList.propTypes = {
   hasNextPage: PropTypes.bool.isRequired,
   isNextPageLoading: PropTypes.bool.isRequired,
   loadNextPage: PropTypes.func.isRequired,
@@ -41,4 +41,4 @@ UsersInfiniteList.propTypes = {
   items: PropTypes.array.isRequired,
 };
 
-export default UsersInfiniteList;
+export default UsersList;
