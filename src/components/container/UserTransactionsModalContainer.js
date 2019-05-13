@@ -36,44 +36,51 @@ class UserTransactionsModalContainer extends React.PureComponent {
 
           const { transactions } = data;
 
-          if (!transactions.length) {
-            this.setState({ hasNextPage: false });
-          }
+          const onLoadMore =
+            !transactions || !transactions.length
+              ? () => {
+                  this.setState({ hasNextPage: false });
+                }
+              : () => {
+                  const lastTransaction = transactions[transactions.length - 1];
+                  const { id: cursor } = lastTransaction;
 
-          const onLoadMore = () => {
-            const lastTransaction = transactions[transactions.length - 1];
-            const { id: cursor } = lastTransaction;
+                  this.setState({ isNextPageLoading: true });
 
-            this.setState({ isNextPageLoading: true });
+                  const updateQuery = (
+                    prevResult,
+                    { fetchMoreResult: newData }
+                  ) => {
+                    const { transactions: prevTransactions } = prevResult;
+                    const { transactions: newTransactions } = newData;
+                    const hasNewData = newTransactions.length;
+                    let data;
 
-            const updateQuery = (prevResult, { fetchMoreResult: newData }) => {
-              const { transactions: prevTransactions } = prevResult;
-              const { transactions: newTransactions } = newData;
-              const hasNewData = newTransactions.length;
-              let data;
+                    if (!hasNewData) {
+                      data = prevResult;
+                      this.setState({ hasNextPage: false });
+                    } else {
+                      const transactions = [
+                        ...prevTransactions,
+                        ...newTransactions,
+                      ];
+                      data = { transactions };
+                    }
 
-              if (!hasNewData) {
-                data = prevResult;
-                this.setState({ hasNextPage: false });
-              } else {
-                const transactions = [...prevTransactions, ...newTransactions];
-                data = { transactions };
-              }
+                    this.setState({ isNextPageLoading: false });
+                    return data;
+                  };
 
-              this.setState({ isNextPageLoading: false });
-              return data;
-            };
-
-            return fetchMore({
-              query: GET_MORE_USER_TRANSACTIONS,
-              variables: {
-                userId,
-                cursor,
-                itemsPerPage: ITEMS_PER_PAGE,
-              },
-              updateQuery,
-            });
-          };
+                  return fetchMore({
+                    query: GET_MORE_USER_TRANSACTIONS,
+                    variables: {
+                      userId,
+                      cursor,
+                      itemsPerPage: ITEMS_PER_PAGE,
+                    },
+                    updateQuery,
+                  });
+                };
 
           const etherTransactions = toEtherTransactions(transactions);
 

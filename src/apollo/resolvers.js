@@ -33,6 +33,26 @@ import BigNumber from "bignumber.js";
 //   return null;
 // };
 
+// Tech-debt: DRY function
+const addToEtherBalance = (user, amount) => {
+  const amountBN = new BigNumber(amount);
+  let { etherBalance } = user;
+  const etherBalanceBN = new BigNumber(etherBalance);
+  etherBalance = etherBalanceBN.plus(amountBN).toString();
+  user = { ...user, etherBalance };
+  return user;
+};
+
+// Tech-debt: DRY function
+const subtractFromEtherBalance = (user, amount) => {
+  const amountBN = new BigNumber(amount);
+  let { etherBalance } = user;
+  const etherBalanceBN = new BigNumber(etherBalance);
+  etherBalance = etherBalanceBN.minus(amountBN).toString();
+  user = { ...user, etherBalance };
+  return user;
+};
+
 const sendEther = async (_, { from, to, amount }, { cache }) => {
   const data = cache.readQuery({
     query: GET_USERS,
@@ -41,32 +61,10 @@ const sendEther = async (_, { from, to, amount }, { cache }) => {
     },
   });
 
-  // Tech-debt: DRY function
-  const addToEtherBalance = (user, amount) => {
-    const amountBN = new BigNumber(amount);
-    let { etherBalance } = user;
-    const etherBalanceBN = new BigNumber(etherBalance);
-    etherBalance = etherBalanceBN.plus(amountBN).toString();
-    user = { ...user, etherBalance };
-    return user;
-  };
-
-  // Tech-debt: DRY function
-  const subtractFromEtherBalance = (user, amount) => {
-    const amountBN = new BigNumber(amount);
-    let { etherBalance } = user;
-    const etherBalanceBN = new BigNumber(etherBalance);
-    etherBalance = etherBalanceBN.minus(amountBN).toString();
-    user = { ...user, etherBalance };
-    return user;
-  };
-
-  // Subtracting
   data.users = data.users.map(user =>
     user.id === from ? subtractFromEtherBalance(user, amount) : user
   );
 
-  // Adding
   data.users = data.users.map(user =>
     user.id === to ? addToEtherBalance(user, amount) : user
   );
