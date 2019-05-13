@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import TransferEtherModal from "../presentational/TransferEtherModal";
 import TransferEtherButton from "../presentational/TransferEtherButton";
 import { ApolloConsumer } from "react-apollo";
-import { SEND_ETHER } from "../../queries";
+import { SEND_ETHER } from "../../apollo/queries";
 
 class TransferEtherButtonContainer extends React.Component {
   state = {
@@ -31,16 +31,6 @@ class TransferEtherButtonContainer extends React.Component {
         <ApolloConsumer>
           {client => {
             const handleTransfer = async (from, to) => {
-              // client.mutate({
-              //   mutation: UPDATE_USER,
-              //   variables: {
-              //     userId: "0x0000000000000000000000000000000000000000",
-              //     etherBalance: "123",
-              //   },
-              // });
-
-              console.log(`${from} -> ${to}`);
-
               client.mutate({
                 mutation: SEND_ETHER,
                 variables: {

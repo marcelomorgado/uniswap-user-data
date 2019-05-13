@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import TransactionsInfiniteList from "./TransactionsInfiniteList";
-import {
-  //toTokenTransactions,
-  toEtherTransactions,
-} from "../../helpers";
 
 function getModalStyle() {
   const top = 50;
@@ -37,12 +33,10 @@ class UserTransactionsModal extends React.Component {
       onLoadMore,
       handleClose,
       open,
-      transactions,
+      etherTransactions,
       hasNextPage,
       isNextPageLoading,
     } = this.props;
-
-    const etherTransactions = toEtherTransactions(transactions);
 
     return (
       <div>
@@ -72,7 +66,7 @@ UserTransactionsModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired,
   userId: PropTypes.string,
-  transactions: PropTypes.array,
+  etherTransactions: PropTypes.array,
   hasNextPage: PropTypes.bool.isRequired,
   isNextPageLoading: PropTypes.bool.isRequired,
 };

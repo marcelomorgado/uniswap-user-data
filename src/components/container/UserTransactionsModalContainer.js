@@ -5,9 +5,12 @@ import { Query } from "react-apollo";
 import {
   GET_MORE_USER_TRANSACTIONS,
   GET_USER_TRANSACTIONS,
-} from "../../queries";
-
-const ITEMS_PER_PAGE = 15;
+  TRANSACTIONS_PER_PAGE as itemsPerPage,
+} from "../../apollo/queries";
+import {
+  //toTokenTransactions,
+  toEtherTransactions,
+} from "../../helpers";
 
 class UserTransactionsModalContainer extends React.PureComponent {
   state = {
@@ -22,61 +25,67 @@ class UserTransactionsModalContainer extends React.PureComponent {
     if (!userId) return <></>;
 
     return (
-      <Query
-        query={GET_USER_TRANSACTIONS}
-        variables={{ userId, itemsPerPage: ITEMS_PER_PAGE }}
-      >
+      <Query query={GET_USER_TRANSACTIONS} variables={{ userId, itemsPerPage }}>
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
 
           const { transactions } = data;
 
-          if (!transactions.length) {
-            this.setState({ hasNextPage: false });
-          }
+          const onLoadMore =
+            !transactions || !transactions.length
+              ? () => {
+                  this.setState({ hasNextPage: false });
+                }
+              : () => {
+                  const lastTransaction = transactions[transactions.length - 1];
+                  const { id: cursor } = lastTransaction;
 
-          const onLoadMore = () => {
-            const lastTransaction = transactions[transactions.length - 1];
-            const { id: cursor } = lastTransaction;
+                  this.setState({ isNextPageLoading: true });
 
-            this.setState({ isNextPageLoading: true });
+                  const updateQuery = (
+                    prevResult,
+                    { fetchMoreResult: newData }
+                  ) => {
+                    const { transactions: prevTransactions } = prevResult;
+                    const { transactions: newTransactions } = newData;
+                    const hasNewData = newTransactions.length;
+                    let data;
 
-            const updateQuery = (prevResult, { fetchMoreResult: newData }) => {
-              const { transactions: prevTransactions } = prevResult;
-              const { transactions: newTransactions } = newData;
-              const hasNewData = newTransactions.length;
-              let data;
+                    if (!hasNewData) {
+                      data = prevResult;
+                      this.setState({ hasNextPage: false });
+                    } else {
+                      const transactions = [
+                        ...prevTransactions,
+                        ...newTransactions,
+                      ];
+                      data = { transactions };
+                    }
 
-              if (!hasNewData) {
-                data = prevResult;
-                this.setState({ hasNextPage: false });
-              } else {
-                const transactions = [...prevTransactions, ...newTransactions];
-                data = { transactions };
-              }
+                    this.setState({ isNextPageLoading: false });
+                    return data;
+                  };
 
-              this.setState({ isNextPageLoading: false });
-              return data;
-            };
+                  return fetchMore({
+                    query: GET_MORE_USER_TRANSACTIONS,
+                    variables: {
+                      userId,
+                      cursor,
+                      itemsPerPage,
+                    },
+                    updateQuery,
+                  });
+                };
 
-            return fetchMore({
-              query: GET_MORE_USER_TRANSACTIONS,
-              variables: {
-                userId,
-                cursor,
-                itemsPerPage: ITEMS_PER_PAGE,
-              },
-              updateQuery,
-            });
-          };
+          const etherTransactions = toEtherTransactions(transactions);
 
           return (
             <UserTransactionsModal
               open={open}
               handleClose={handleClose}
               userId={userId}
-              transactions={transactions}
+              etherTransactions={etherTransactions}
               onLoadMore={onLoadMore}
               hasNextPage={hasNextPage}
               isNextPageLoading={isNextPageLoading}

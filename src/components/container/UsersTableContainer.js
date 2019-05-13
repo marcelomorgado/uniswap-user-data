@@ -1,9 +1,12 @@
 import React from "react";
-//import UsersTable from "../presentational/UsersTable";
 import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import { GET_USERS, GET_MORE_USERS, USERS_PER_PAGE } from "../../queries";
+import {
+  GET_USERS,
+  GET_MORE_USERS,
+  USERS_PER_PAGE,
+} from "../../apollo/queries";
 
 class UsersTableContainer extends React.Component {
   state = {
@@ -20,45 +23,48 @@ class UsersTableContainer extends React.Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
           const { users } = data;
-          if (users.length === 1) console.log(users[0]);
 
-          if (!users.length) {
-            this.setState({ hasNextPage: false });
-          }
+          const onLoadMore =
+            !users || !users.length
+              ? () => {
+                  this.setState({ hasNextPage: false });
+                }
+              : () => {
+                  const lastUser = users[users.length - 1];
+                  const { id: cursor } = lastUser;
 
-          const onLoadMore = () => {
-            const lastUser = users[users.length - 1];
-            const { id: cursor } = lastUser;
+                  this.setState({ isNextPageLoading: true });
 
-            this.setState({ isNextPageLoading: true });
+                  const updateQuery = (
+                    prevResult,
+                    { fetchMoreResult: newData }
+                  ) => {
+                    const { users: prevUsers } = prevResult;
+                    const { users: newUsers } = newData;
+                    const hasNewData = newUsers.length;
+                    let data;
 
-            const updateQuery = (prevResult, { fetchMoreResult: newData }) => {
-              const { users: prevUsers } = prevResult;
-              const { users: newUsers } = newData;
-              const hasNewData = newUsers.length;
-              let data;
+                    if (!hasNewData) {
+                      data = prevResult;
+                      this.setState({ hasNextPage: false });
+                    } else {
+                      const users = [...prevUsers, ...newUsers];
+                      data = { users };
+                    }
 
-              if (!hasNewData) {
-                data = prevResult;
-                this.setState({ hasNextPage: false });
-              } else {
-                const users = [...prevUsers, ...newUsers];
-                data = { users };
-              }
+                    this.setState({ isNextPageLoading: false });
+                    return data;
+                  };
 
-              this.setState({ isNextPageLoading: false });
-              return data;
-            };
-
-            return fetchMore({
-              query: GET_MORE_USERS,
-              variables: {
-                cursor,
-                itemsPerPage: USERS_PER_PAGE,
-              },
-              updateQuery,
-            });
-          };
+                  return fetchMore({
+                    query: GET_MORE_USERS,
+                    variables: {
+                      cursor,
+                      itemsPerPage: USERS_PER_PAGE,
+                    },
+                    updateQuery,
+                  });
+                };
           return (
             <UsersInfinityList
               items={users}
