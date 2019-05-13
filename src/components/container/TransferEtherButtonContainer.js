@@ -31,16 +31,6 @@ class TransferEtherButtonContainer extends React.Component {
         <ApolloConsumer>
           {client => {
             const handleTransfer = async (from, to) => {
-              // client.mutate({
-              //   mutation: UPDATE_USER,
-              //   variables: {
-              //     userId: "0x0000000000000000000000000000000000000000",
-              //     etherBalance: "123",
-              //   },
-              // });
-
-              console.log(`${from} -> ${to}`);
-
               client.mutate({
                 mutation: SEND_ETHER,
                 variables: {
