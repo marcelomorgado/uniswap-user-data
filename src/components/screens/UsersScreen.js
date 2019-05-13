@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
-import UsersListContainer from "../components/container/UsersListContainer";
-import UserTransactionsModalContainer from "../components/container/UserTransactionsModalContainer";
-import TransferEtherButtonContainer from "../components/container/TransferEtherButtonContainer";
+import UsersListContainer from "../container/UsersListContainer";
+import UserTransactionsModalContainer from "../container/UserTransactionsModalContainer";
+import TransferEtherButtonContainer from "../container/TransferEtherButtonContainer";
 
 class UsersScreen extends React.Component {
   state = {
