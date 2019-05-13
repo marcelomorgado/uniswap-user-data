@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import TransferEtherModal from "../presentational/TransferEtherModal";
 import TransferEtherButton from "../presentational/TransferEtherButton";
 import { ApolloConsumer } from "react-apollo";
-import { SEND_ETHER } from "../../queries";
+import { SEND_ETHER } from "../../apollo/queries";
 
 class TransferEtherButtonContainer extends React.Component {
   state = {

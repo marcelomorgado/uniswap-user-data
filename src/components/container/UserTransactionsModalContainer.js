@@ -5,7 +5,7 @@ import { Query } from "react-apollo";
 import {
   GET_MORE_USER_TRANSACTIONS,
   GET_USER_TRANSACTIONS,
-} from "../../queries";
+} from "../../apollo/queries";
 
 const ITEMS_PER_PAGE = 15;
 

@@ -3,7 +3,11 @@ import React from "react";
 import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import { GET_USERS, GET_MORE_USERS, USERS_PER_PAGE } from "../../queries";
+import {
+  GET_USERS,
+  GET_MORE_USERS,
+  USERS_PER_PAGE,
+} from "../../apollo/queries";
 
 class UsersTableContainer extends React.Component {
   state = {
