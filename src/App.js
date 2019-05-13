@@ -15,6 +15,7 @@ const typeDefs = `
 
   type Mutation {
     updateUsers(users: [User]!)
+    updateUserEtherBalance(userId: String!, etherBalance: String)
   }
 `;
 
@@ -22,6 +23,11 @@ const resolvers = {
   Mutation: {
     updateUsers: async (_, { users }, { cache }) => {
       await cache.writeData({ data: { users } });
+      return null;
+    },
+    updateUserEtherBalance: async (_, { userId, etherBalance }, { cache }) => {
+      //await cache.writeData({ data: { userId } });
+
       return null;
     },
   },

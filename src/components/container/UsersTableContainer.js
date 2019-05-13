@@ -3,27 +3,9 @@ import React from "react";
 import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
+import { GET_USERS, GET_MORE_USERS } from "../../queries";
 
 const ITEMS_PER_PAGE = 20;
-
-const GET_USERS = gql`
-  query User($itemsPerPage: Int) {
-    users(first: $itemsPerPage) {
-      id
-      etherBalance @client
-    }
-  }
-`;
-
-const GET_MORE_USERS = gql`
-  query User($cursor: String, $itemsPerPage: Int) {
-    users(first: $itemsPerPage, where: { id_gt: $cursor }) {
-      id
-      etherBalance @client
-    }
-  }
-`;
 
 class UsersTableContainer extends React.Component {
   state = {

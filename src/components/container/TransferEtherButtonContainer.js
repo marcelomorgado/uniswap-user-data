@@ -2,76 +2,7 @@ import React, { Fragment } from "react";
 import TransferEtherModal from "../presentational/TransferEtherModal";
 import TransferEtherButton from "../presentational/TransferEtherButton";
 import { ApolloConsumer } from "react-apollo";
-import { gql } from "apollo-boost";
-
-// const GET_USERS = gql`
-//   query User {
-//     users @client {
-//       id
-//     }
-//   }
-// `;
-
-// const GET_USERS = gql`
-//   query User {
-//     users {
-//       id
-//     }
-//   }
-// `;
-
-const GET_USERS = gql`
-  query User($itemsPerPage: Int) {
-    users(first: $itemsPerPage) {
-      id
-      etherBalance @client
-    }
-  }
-`;
-
-const GET_USER_TRANSACTIONS = gql`
-  query Transaction($userId: String!, $itemsPerPage: Int) {
-    transactions(first: $itemsPerPage, where: { user: $userId }) {
-      id
-      tx
-      event
-      block
-      timestamp
-      exchangeAddress
-      tokenAddress
-      tokenSymbol
-      user
-      ethAmount
-      tokenAmount
-      fee
-    }
-  }
-`;
-
-const GET_TRANSACTIONS2 = gql`
-  query Transaction($userId: String!) {
-    transactions(where: { user: $userId }) @client
-  }
-`;
-
-const GET_TRANSACTIONS3 = gql`
-  query Transaction {
-    transactions @client {
-      id
-      user
-    }
-  }
-`;
-
-const UPDATE_USERS = gql`
-  mutation updateUsers($users: [User]!) {
-    updateUsers(users: $users) @client {
-      users {
-        id
-      }
-    }
-  }
-`;
+import { GET_USERS, UPDATE_USERS } from "../../queries";
 
 class TransferEtherButtonContainer extends React.Component {
   state = {
@@ -113,14 +44,6 @@ class TransferEtherButtonContainer extends React.Component {
                 variables: {
                   users,
                 },
-                // optimisticResponse: {
-                //   __typename: "Mutation",
-                //   updateUsers: { users, __typename: "[User]" },
-                // },
-                // optimisticResponse: {
-                //   __typename: "Mutation",
-                //   updateUsers: { users, __typename: "[User]" },
-                // },
                 optimisticResponse: {
                   users,
                 },
