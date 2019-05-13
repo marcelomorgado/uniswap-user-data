@@ -6,6 +6,10 @@ import {
   GET_MORE_USER_TRANSACTIONS,
   GET_USER_TRANSACTIONS,
 } from "../../apollo/queries";
+import {
+  //toTokenTransactions,
+  toEtherTransactions,
+} from "../../helpers";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -71,12 +75,14 @@ class UserTransactionsModalContainer extends React.PureComponent {
             });
           };
 
+          const etherTransactions = toEtherTransactions(transactions);
+
           return (
             <UserTransactionsModal
               open={open}
               handleClose={handleClose}
               userId={userId}
-              transactions={transactions}
+              etherTransactions={etherTransactions}
               onLoadMore={onLoadMore}
               hasNextPage={hasNextPage}
               isNextPageLoading={isNextPageLoading}

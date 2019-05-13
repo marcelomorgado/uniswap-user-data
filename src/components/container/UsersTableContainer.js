@@ -24,7 +24,6 @@ class UsersTableContainer extends React.Component {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
           const { users } = data;
-          if (users.length === 1) console.log(users[0]);
 
           if (!users.length) {
             this.setState({ hasNextPage: false });
