@@ -36,7 +36,7 @@ class TransferEtherButtonContainer extends React.Component {
                 variables: {
                   from,
                   to,
-                  amount: "1",
+                  amount: "1.000000000000000000",
                 },
               });
             };

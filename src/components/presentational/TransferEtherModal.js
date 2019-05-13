@@ -90,4 +90,4 @@ UserField.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default withStyles()(TransferEtherModal);
+export default withStyles({})(TransferEtherModal);
