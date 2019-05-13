@@ -92,32 +92,28 @@ const insertTransaction = async ({ tx, userId }, cache) => {
 const sendEther = async (_, { from, to, amount }, { cache }) => {
   await updateBalances({ from, to, amount }, cache);
 
-  try {
-    const baseTx = {
-      tx: "txhash",
-      tokenAddress: "0x123",
-      tokenSymbol: "DAI",
-      ethAmount: amount,
-      tokenAmount: "0",
-      __typename: "Transaction",
-    };
+  const baseTx = {
+    tx: "txhash",
+    tokenAddress: "0x123",
+    tokenSymbol: "DAI",
+    ethAmount: amount,
+    tokenAmount: "0",
+    __typename: "Transaction",
+  };
 
-    const fromTx = {
-      ...baseTx,
-      event: TokenPurchase,
-      user: from,
-    };
-    const toTx = {
-      ...baseTx,
-      event: EthPurchase,
-      user: to,
-    };
+  const fromTx = {
+    ...baseTx,
+    event: TokenPurchase,
+    user: from,
+  };
+  const toTx = {
+    ...baseTx,
+    event: EthPurchase,
+    user: to,
+  };
 
-    await insertTransaction({ tx: fromTx, userId: from }, cache);
-    await insertTransaction({ tx: toTx, userId: to }, cache);
-  } catch (error) {
-    console.log(error);
-  }
+  await insertTransaction({ tx: fromTx, userId: from }, cache);
+  await insertTransaction({ tx: toTx, userId: to }, cache);
 
   return null;
 };
