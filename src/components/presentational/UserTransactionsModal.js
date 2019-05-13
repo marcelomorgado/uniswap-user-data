@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import TransactionsInfiniteList from "./TransactionsInfiniteList";
+import TransactionsList from "./TransactionsList";
 
 function getModalStyle() {
   const top = 50;
@@ -47,7 +47,7 @@ class UserTransactionsModal extends React.Component {
           onClose={handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <TransactionsInfiniteList
+            <TransactionsList
               items={etherTransactions}
               loadNextPage={onLoadMore}
               hasNextPage={hasNextPage}
