@@ -1,17 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders the component 1`] = `
-<div>
-  <WithStyles(Modal)
-    onClose={[Function]}
-    open={true}
-  >
-    <TransactionsList
-      hasNextPage={false}
-      isNextPageLoading={false}
-      items={Array []}
-      loadNextPage={[Function]}
-    />
-  </WithStyles(Modal)>
-</div>
+<UserTransactionsModal
+  classes={
+    Object {
+      "root": "UserTransactionsModal-root-1",
+    }
+  }
+  etherTransactions={Array []}
+  handleClose={[Function]}
+  hasNextPage={false}
+  isNextPageLoading={false}
+  onLoadMore={[Function]}
+  open={true}
+  userId="0x123User"
+/>
 `;
