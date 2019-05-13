@@ -12,9 +12,17 @@ import { gql } from "apollo-boost";
 //   }
 // `;
 
+// const GET_USERS = gql`
+//   query User {
+//     users {
+//       id
+//     }
+//   }
+// `;
+
 const GET_USERS = gql`
-  query User {
-    users @client {
+  query User($itemsPerPage: Int) {
+    users(first: $itemsPerPage) {
       id
     }
   }
@@ -56,7 +64,11 @@ const GET_TRANSACTIONS3 = gql`
 
 const UPDATE_USERS = gql`
   mutation updateUsers($users: [User]!) {
-    updateUsers(users: $users) @client
+    updateUsers(users: $users) @client {
+      users {
+        id
+      }
+    }
   }
 `;
 
@@ -87,16 +99,68 @@ class TransferEtherButtonContainer extends React.Component {
         <ApolloConsumer>
           {client => {
             const handleTransfer = async (from, to) => {
+              const users = [
+                {
+                  id: "0x9999999999999999999999999999999999999999",
+                  __typename: "User",
+                },
+              ];
+
+              // client.writeQuery({
+              //   query: GET_USERS,
+              //   // variables: {
+              //   //   first: 20,
+              //   // },
+              //   data: { users },
+              // });
+              //
               client.mutate({
                 mutation: UPDATE_USERS,
                 variables: {
-                  users: [
-                    {
-                      id: 1,
+                  users,
+                },
+                // optimisticResponse: {
+                //   __typename: "Mutation",
+                //   updateUsers: { users, __typename: "[User]" },
+                // },
+                // optimisticResponse: {
+                //   __typename: "Mutation",
+                //   updateUsers: { users, __typename: "[User]" },
+                // },
+                optimisticResponse: {
+                  users,
+                },
+                //https://medium.freecodecamp.org/how-to-update-the-apollo-clients-cache-after-a-mutation-79a0df79b840
+                update: (proxy, { data: { users } }) => {
+                  try {
+                    if (!users) return;
+                    //    console.log(updateUsers.users);
+                    // Read the data from our cache for this query.
+                    const data = proxy.readQuery({
+                      query: GET_USERS,
+                      variables: {
+                        itemsPerPage: 20,
+                      },
+                    });
 
-                      __typename: "User",
-                    },
-                  ],
+                    data.users = users;
+                    // Add our comment from the mutation to the end.
+                    //data.users = [];
+                    // Write our data back to the cache.
+                    proxy.writeQuery({
+                      query: GET_USERS,
+                      variables: {
+                        itemsPerPage: 20,
+                      },
+                      data,
+                    });
+
+                    //client.queryManager.refetchQueryByName()
+
+                    //client.queryManager.broadcastQueries();
+                  } catch (error) {
+                    console.log(error);
+                  }
                 },
               });
 

@@ -11,10 +11,12 @@ const client = new ApolloClient({
   /* the magic */
   clientState: {
     //   defaults: { transactions: [], users: [] },
+    //https://codesandbox.io/s/l99l9r1ml9
     resolvers: {
       Mutation: {
         updateUsers: async (_, { users }, { cache, getCacheKey }) => {
           //const users = await cache.
+          //console.log(cache.readQuery({ query: wsGroups, variables: { w_id: wid } }))
           await cache.writeData({ data: { users } });
           return null;
         },
@@ -24,6 +26,7 @@ const client = new ApolloClient({
       type Mutation {
         updateUsers(users: [User]!)
       }
+
       `,
   },
 });

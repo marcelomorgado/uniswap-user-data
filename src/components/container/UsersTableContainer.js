@@ -4,6 +4,7 @@ import UsersInfinityList from "../presentational/UsersInfinityList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
+import Button from "@material-ui/core/Button";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -34,10 +35,11 @@ class UsersTableContainer extends React.Component {
     const { onRowClick } = this.props;
     return (
       <Query query={GET_USERS} variables={{ itemsPerPage: ITEMS_PER_PAGE }}>
-        {({ loading, error, data, fetchMore }) => {
+        {({ loading, error, data, fetchMore, refetch }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
           const { users } = data;
+          console.log(`running, users = ${users.length}`);
 
           if (!users.length) {
             this.setState({ hasNextPage: false });
@@ -77,13 +79,22 @@ class UsersTableContainer extends React.Component {
             });
           };
           return (
-            <UsersInfinityList
-              items={users}
-              loadNextPage={onLoadMore}
-              hasNextPage={hasNextPage}
-              isNextPageLoading={isNextPageLoading}
-              onTransactionsClick={onRowClick}
-            />
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => refetch()}
+              >
+                Refetch
+              </Button>
+              <UsersInfinityList
+                items={users}
+                loadNextPage={onLoadMore}
+                hasNextPage={hasNextPage}
+                isNextPageLoading={isNextPageLoading}
+                onTransactionsClick={onRowClick}
+              />
+            </>
           );
         }}
       </Query>
