@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
-import UsersTableContainer from "../components/container/UsersTableContainer";
-import UserTransactionsModalContainer from "../components/container/UserTransactionsModalContainer";
-import TransferEtherButtonContainer from "../components/container/TransferEtherButtonContainer";
+import UsersListContainer from "../container/UsersListContainer";
+import UserTransactionsModalContainer from "../container/UserTransactionsModalContainer";
+import TransferEtherButtonContainer from "../container/TransferEtherButtonContainer";
 
 class UsersScreen extends React.Component {
   state = {
@@ -35,7 +35,7 @@ class UsersScreen extends React.Component {
           handleClose={closeTxModal}
           userId={userId}
         />
-        <UsersTableContainer onRowClick={onRowClick} />
+        <UsersListContainer onRowClick={onRowClick} />
       </Fragment>
     );
   }

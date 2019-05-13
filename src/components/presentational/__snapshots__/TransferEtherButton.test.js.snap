@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the component 1`] = `
+<TransferEtherButton
+  classes={
+    Object {
+      "button": "TransferEtherButton-button-1",
+    }
+  }
+  onClick={[Function]}
+/>
+`;

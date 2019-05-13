@@ -1,5 +1,5 @@
 import React from "react";
-import UsersInfinityList from "../presentational/UsersInfinityList";
+import UsersList from "../presentational/UsersList";
 import PropTypes from "prop-types";
 import { Query } from "react-apollo";
 import {
@@ -8,7 +8,7 @@ import {
   USERS_PER_PAGE,
 } from "../../apollo/queries";
 
-class UsersTableContainer extends React.Component {
+class UsersListContainer extends React.Component {
   state = {
     hasNextPage: true,
     isNextPageLoading: false,
@@ -66,7 +66,7 @@ class UsersTableContainer extends React.Component {
                   });
                 };
           return (
-            <UsersInfinityList
+            <UsersList
               items={users}
               loadNextPage={onLoadMore}
               hasNextPage={hasNextPage}
@@ -80,8 +80,8 @@ class UsersTableContainer extends React.Component {
   }
 }
 
-UsersTableContainer.propTypes = {
+UsersListContainer.propTypes = {
   onRowClick: PropTypes.func.isRequired,
 };
 
-export default UsersTableContainer;
+export default UsersListContainer;

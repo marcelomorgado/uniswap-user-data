@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the component 1`] = `
+<User
+  classes={
+    Object {
+      "bullet": "User-bullet-2",
+      "button": "User-button-5",
+      "card": "User-card-1",
+      "pos": "User-pos-4",
+      "title": "User-title-3",
+    }
+  }
+  handleTransactions={[Function]}
+  style={Object {}}
+  user={
+    Object {
+      "etherBalance": "10",
+      "id": "0x123User",
+    }
+  }
+/>
+`;

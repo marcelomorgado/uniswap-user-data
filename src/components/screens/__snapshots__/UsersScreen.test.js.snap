@@ -2,13 +2,14 @@
 
 exports[`renders without crashing 1`] = `
 <Fragment>
+  <TransferEtherButtonContainer />
   <UserTransactionsModalContainer
     handleClose={[Function]}
     handleOpen={[Function]}
     open={false}
     userId={null}
   />
-  <UsersTableContainer
+  <UsersListContainer
     onRowClick={[Function]}
   />
 </Fragment>
