@@ -5,13 +5,12 @@ import { Query } from "react-apollo";
 import {
   GET_MORE_USER_TRANSACTIONS,
   GET_USER_TRANSACTIONS,
+  TRANSACTIONS_PER_PAGE as itemsPerPage,
 } from "../../apollo/queries";
 import {
   //toTokenTransactions,
   toEtherTransactions,
 } from "../../helpers";
-
-const ITEMS_PER_PAGE = 15;
 
 class UserTransactionsModalContainer extends React.PureComponent {
   state = {
@@ -26,10 +25,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
     if (!userId) return <></>;
 
     return (
-      <Query
-        query={GET_USER_TRANSACTIONS}
-        variables={{ userId, itemsPerPage: ITEMS_PER_PAGE }}
-      >
+      <Query query={GET_USER_TRANSACTIONS} variables={{ userId, itemsPerPage }}>
         {({ loading, error, data, fetchMore }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error :(</p>;
@@ -76,7 +72,7 @@ class UserTransactionsModalContainer extends React.PureComponent {
                     variables: {
                       userId,
                       cursor,
-                      itemsPerPage: ITEMS_PER_PAGE,
+                      itemsPerPage,
                     },
                     updateQuery,
                   });

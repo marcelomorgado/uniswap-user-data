@@ -1,6 +1,16 @@
-import { GET_USERS, USERS_PER_PAGE } from "./queries";
+import {
+  GET_USERS,
+  USERS_PER_PAGE,
+  GET_USER_TRANSACTIONS,
+  TRANSACTIONS_PER_PAGE,
+} from "./queries";
 import BigNumber from "bignumber.js";
-
+import {
+  TokenPurchase,
+  EthPurchase,
+  AddLiquidity,
+  RemoveLiquidity,
+} from "../constants/TransactionEvent";
 // const updateUsers = async (_, { users }, { cache }) => {
 //   await cache.writeData({ data: { users } });
 //   return null;
@@ -78,8 +88,52 @@ const updateBalances = async ({ from, to, amount }, cache) => {
   });
 };
 
-const sendEther = async (_, args, { cache }) => {
-  await updateBalances(args, cache);
+const sendEther = async (_, { from, to, amount }, { cache }) => {
+  await updateBalances({ from, to, amount }, cache);
+
+  // TXs
+  try {
+    const data = cache.readQuery({
+      query: GET_USER_TRANSACTIONS,
+      variables: {
+        userId: from,
+        itemsPerPage: TRANSACTIONS_PER_PAGE,
+      },
+    });
+
+    const tx = {
+      id: "1234",
+      tx: "txhash",
+      event: TokenPurchase,
+      tokenAddress: "0x123",
+      tokenSymbol: "DAI",
+      user: from,
+      ethAmount: amount,
+      tokenAmount: "0",
+      __typename: "Transaction",
+    };
+
+    data.transactions = [tx, ...data.transactions];
+
+    // data.users = data.users.map(user =>
+    //   user.id === from ? subtractFromEtherBalance(user, amount) : user
+    // );
+    //
+    // data.users = data.users.map(user =>
+    //   user.id === to ? addToEtherBalance(user, amount) : user
+    // );
+
+    await cache.writeQuery({
+      query: GET_USER_TRANSACTIONS,
+      variables: {
+        userId: from,
+        itemsPerPage: TRANSACTIONS_PER_PAGE,
+      },
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   return null;
 };
