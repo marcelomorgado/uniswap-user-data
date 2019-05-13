@@ -1,13 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import EtherTransaction from "./EtherTransaction";
+import TokenTransaction from "./TokenTransaction";
 
 function Transaction({ transaction, style }) {
-  const { txHash, type, tokenAddress, user, amount } = transaction;
+  const { tokenAddress } = transaction;
+  const isEtherTransfer = tokenAddress === "0x";
   return (
     <div style={style}>
-      <div>
-        {txHash} - {type} - {tokenAddress} - {user} - {amount}
-      </div>
+      {isEtherTransfer ? (
+        <EtherTransaction transaction={transaction} />
+      ) : (
+        <TokenTransaction transaction={transaction} />
+      )}
     </div>
   );
 }

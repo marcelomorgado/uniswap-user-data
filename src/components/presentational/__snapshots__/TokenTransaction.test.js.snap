@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the component 1`] = `
+<div>
+  txHash
+   - 
+  EthPurchase
+   - 
+  TOKEN
+   - 
+  0x123User
+   - 
+  1
+</div>
+`;

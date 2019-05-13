@@ -4,16 +4,16 @@ exports[`renders the component 1`] = `
 <div
   style={Object {}}
 >
-  <div>
-    txHash
-     - 
-    EthPurchase
-     - 
-    0x
-     - 
-    0x123User
-     - 
-    1
-  </div>
+  <EtherTransaction
+    transaction={
+      Object {
+        "amount": "1",
+        "tokenAddress": "0x",
+        "txHash": "txHash",
+        "type": "EthPurchase",
+        "user": "0x123User",
+      }
+    }
+  />
 </div>
 `;

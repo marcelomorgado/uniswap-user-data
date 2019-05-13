@@ -45,9 +45,15 @@ export const toEtherTransactions = transactions =>
 
 export const toTokenTransactions = transactions =>
   transactions.map(tx => {
-    const { tx: txHash, user, tokenAddress, tokenAmount: amount } = tx;
+    const {
+      tx: txHash,
+      user,
+      tokenAddress,
+      tokenSymbol,
+      tokenAmount: amount,
+    } = tx;
     const type = getTokenTransactionType(tx);
-    return { txHash, type, tokenAddress, user, amount };
+    return { txHash, type, tokenAddress, tokenSymbol, user, amount };
   });
 
 export default {

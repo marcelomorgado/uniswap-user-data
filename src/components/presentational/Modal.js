@@ -22,23 +22,19 @@ const modalStyles = theme => {
   };
 };
 
-class Modal extends React.Component {
-  render() {
-    const { classes, onClose, open, children } = this.props;
-
-    return (
-      <div>
-        <MuiModal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={open}
-          onClose={onClose}
-        >
-          <div className={classes.paper}>{children}</div>
-        </MuiModal>
-      </div>
-    );
-  }
+function Modal({ classes, onClose, open, children }) {
+  return (
+    <div>
+      <MuiModal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={open}
+        onClose={onClose}
+      >
+        <div className={classes.paper}>{children}</div>
+      </MuiModal>
+    </div>
+  );
 }
 
 Modal.propTypes = {
